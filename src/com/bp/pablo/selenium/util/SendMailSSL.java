@@ -34,7 +34,7 @@ public class SendMailSSL {
      */
     public static void sendMailCMG(String body, String subject)
        {
-        Properties props = new Properties();
+        /*Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.socketFactory.port", "465");
         props.put("mail.smtp.socketFactory.class",
@@ -71,7 +71,7 @@ public class SendMailSSL {
 					e2.printStackTrace();
 				}
 			}
-           
+           */
         
     }
 

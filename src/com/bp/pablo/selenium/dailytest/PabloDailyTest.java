@@ -1,7 +1,12 @@
 package com.bp.pablo.selenium.dailytest;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -13,8 +18,21 @@ import com.bp.pablo.selenium.util.SendMailSSL;
 import com.bp.pablo.selenium.util.WriteLogFile;
 import com.thoughtworks.selenium.Selenium;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PabloDailyTest.
+ */
 public class PabloDailyTest {
 
+	/**
+	 * Run test.
+	 *
+	 * @param ps the ps
+	 * @param acc the acc
+	 * @param driver the driver
+	 * @param selenium the selenium
+	 * @throws InterruptedException the interrupted exception
+	 */
 	public  void runTest(PabloSite ps, TestAccount acc, WebDriver driver, Selenium selenium) throws InterruptedException{
 		String bodyText = "";		
 		if(ps!=null && acc!=null){
@@ -92,10 +110,12 @@ public class PabloDailyTest {
 						List<WebElement> options = dropdowList.findElements(By.tagName("option"));
 						if(options!=null){
 							for(WebElement option : options){
-								if(!option.getAttribute("value").equalsIgnoreCase("department")){
+								/*if(!option.getAttribute("value").equalsIgnoreCase("department")){*/
 									ListvalueOfdropdowList.add(option.getText());
-								}
+								/*}*/
 							}
+							bodyText = "<h3>Test function main diary dropdow list at top passed</h3><br>";
+							WriteLogFile.logger.info("Test function main diary dropdow list at top passed");
 						}else{
 							bodyText = "<h3 style=\"color:red\">Cannot loading data in dropdowlist in  " + ps.getMainview_diary_url() +" </h3>";
 							WriteLogFile.logger.info("Cannot loading case work in " + ps.getMainview_diary_url());
@@ -113,13 +133,13 @@ public class PabloDailyTest {
 					WebElement caseWork = driver.findElement(By.id("DiaryArea"));
 					String notifi = caseWork.getText();
 					if(notifi.contains("There was a communication error:")){
-						bodyText = "<h3 style=\"color:red\">Cannot loading case work of "+ acc.getUsername_admin()+" in " + ps.getMainview_diary_url() +" </h3>";
+						bodyText = "<h3 style=\"color:red\">Cannot loading case work of "+ acc.getUsername_admin()+" in " + ps.getMainview_diary_url() +" at the time : "+ System.currentTimeMillis() +"</h3>";
 						WriteLogFile.logger.info("Cannot loading case work in " + ps.getMainview_diary_url());
 						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 					}
 						/*** check function popup of table diary_table ****/
 						bodyText ="<h3>Test function main diary table diary </h3><br>";
-						WriteLogFile.logger.info("Test function main diary dropdow list at top");
+						WriteLogFile.logger.info("Test function main diary table diary");
 						
 						boolean displayTable = false;
 						for(int i = 0; i < ListvalueOfdropdowList.size() ; i ++ ){
@@ -131,13 +151,26 @@ public class PabloDailyTest {
 							for(WebElement option : options){
 							    if(option.getText().equalsIgnoreCase(ListvalueOfdropdowList.get(i))){
 							        option.click();
-							        Thread.sleep(10000);
-							    	WebElement tableCase = caseWork.findElement(By.id("diary_table"));
+							        Thread.sleep(20000);
+							        WebElement tableCase;
+							        try {
+							        	tableCase = caseWork.findElement(By.id("diary_table"));	
+									} catch (Exception e) {
+										String note = caseWork.getText();
+										if(note.contains("There was a communication error:")){
+											bodyText = "<h3 style=\"color:red\">Cannot loading case work of "+option.getText() +" in " + ps.getMainview_diary_url() +" at the time : "+ System.currentTimeMillis() +"</h3>";
+											WriteLogFile.logger.info("Cannot loading case work in " + ps.getMainview_diary_url());
+											SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+										}
+										continue;
+									}
 									if(tableCase.isDisplayed()){
 										displayTable = true;
 										int TableRowCount = selenium.getXpathCount("//table[@id='diary_table']/tbody/tr").intValue();
 										if(TableRowCount > 0 ){
 											/** check when click to button checkPriority ****/
+											bodyText ="<h3>Test function main diary table diary click to button check priority</h3><br>";
+											WriteLogFile.logger.info("Test function main diary table diary click to button check priority");
 											selenium.click("checkPriority");
 											Thread.sleep(1000);
 											WebElement popupPriority = driver.findElement(By.id("actionForm"));
@@ -150,6 +183,9 @@ public class PabloDailyTest {
 													bodyText = "<h3 style=\"color:red\">The dropdown list is empty when click to the button Reallocate To in " + ps.getMainview_diary_url() +" </h3>";
 													WriteLogFile.logger.info(">The dropdown list is empty when click to the button Reallocate To in " + ps.getMainview_diary_url());
 													SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+												}else{
+													bodyText ="<h3>Test function main diary table diary click to button check priority passed</h3><br>";
+													WriteLogFile.logger.info("Test function main diary table diary click to button check priority passed");
 												}
 											}else{
 												bodyText = "<h3 style=\"color:red\">The popup is not display when click to the button priority  in " + ps.getMainview_diary_url() +" </h3>";
@@ -160,6 +196,8 @@ public class PabloDailyTest {
 											/*** end check when click button checkPriority ****/
 											
 											/**** check popup when click to td of table ****/
+											bodyText ="<h3>Test function main diary table diary click to random td in table</h3><br>";
+											WriteLogFile.logger.info("Test function main diary table diary click to random td in table");
 											Thread.sleep(1000);
 											selenium.click("xpath=//tr[@id='diary_row_id0' and @class='DiaryTraffic3']/td[2][@class='DiaryCell DiaryRow']");
 											Thread.sleep(1000);
@@ -221,6 +259,12 @@ public class PabloDailyTest {
 														WriteLogFile.logger.info("The data of popup is not display right when click to the table case work in " + ps.getMainview_diary_url());
 														SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 													}
+													
+													if(checkTitle == true && checkData == true){
+														bodyText ="<h3>Test function main diary table diary click to random td in table passed</h3><br>";
+														WriteLogFile.logger.info("Test function main diary table diary click to random td in table passeds");
+													}
+													
 												}else{
 													bodyText = "<h3 style=\"color:red\">The popup is not display when click to the td of table case work in " + ps.getMainview_diary_url() +" </h3>";
 													WriteLogFile.logger.info("The popup is not display when click to the table case work in " + ps.getMainview_diary_url());
@@ -243,9 +287,536 @@ public class PabloDailyTest {
 					WriteLogFile.logger.info("Server was broken. Can not open website");
 					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 				}
-				
-				
 				/*********end checking diary main view function is still alive **********/
+				
+				/******* start checking Diary configuration: *****/
+				selenium.open(ps.getDiary_configuration());
+				Thread.sleep(2000);
+				if(selenium.isTextPresent("Diary configuration")){
+					bodyText ="<h3>Go to diary configuration passeed</h3><br>";
+					WriteLogFile.logger.info("Go to diary configuration passeed");
+				}else{
+					bodyText = "<h3 style=\"color:red\">Cannot open website "+ps.getDiary_configuration()+"</h3>";
+					WriteLogFile.logger.info("Server was broken. Can not open website :" +ps.getDiary_configuration());
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				/***** start check function of unmapped user ****/
+				try {
+					bodyText ="<h3>Go to diary configuration check unMapped table</h3><br>";
+					WriteLogFile.logger.info("Go to diary configuration check unMapped table");
+					WebElement tableUnmap = driver.findElement(By.id("usermapping"));
+					if(tableUnmap.isDisplayed()){
+						int TableRowCount = selenium.getXpathCount("//table[@id='usermapping']/tbody/tr").intValue();
+						if(TableRowCount > 1){
+							selenium.click("xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr[1]/td[2]/a[@class='buttonMap goButton']");
+							Thread.sleep(1000);
+							try {
+								WebElement popup = driver.findElement(By.id("popupContact"));
+								if(popup.isDisplayed()){
+									bodyText ="<h3>Go to diary configuration check unMapped table and click to button usermapping passed</h3><br>";
+									WriteLogFile.logger.info("Go to diary configuration check unMapped table and click to button usermapping passed");
+									selenium.click("popupContactClose");
+									Thread.sleep(1000);
+								}else{
+									bodyText = "<h3 style=\"color:red\">Can't load  popup when click to button usermapping in :"+ps.getDiary_configuration()+"</h3>";
+									WriteLogFile.logger.info("Can't load  popup when click to button usermapping in :"+ps.getDiary_configuration());
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+							} catch (Exception e) {
+								bodyText = "<h3 style=\"color:red\">Can't load  popup when click to button usermapping in :"+ps.getDiary_configuration()+"</h3>";
+								WriteLogFile.logger.info("Can't load  popup when click to button usermapping in :"+ps.getDiary_configuration());
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+							
+						}
+					}else{
+						bodyText = "<h3 style=\"color:red\">Can't load  Unmapped User table in :"+ps.getDiary_configuration()+"</h3>";
+						WriteLogFile.logger.info("Can't load  Unmapped User table in :"+ps.getDiary_configuration());
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+					
+				} catch (Exception e) {
+					bodyText = "<h3 style=\"color:red\">Can't load  Unmapped User table in :"+ps.getDiary_configuration()+"</h3>";
+					WriteLogFile.logger.info("Can't load  Unmapped User table in :"+ps.getDiary_configuration());
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				/***** end check function of unmapped user ****/
+				
+				/***** start check function of mapped user ****/
+				
+				try {
+					bodyText ="<h3>Go to diary configuration check Mapped table</h3><br>";
+					WriteLogFile.logger.info("Go to diary configuration check Mapped table");
+					WebElement tableMappedUser = driver.findElement(By.id("usermapped"));
+					if(tableMappedUser.isDisplayed()){
+						int TableRowCount = selenium.getXpathCount("//table[@id='usermapped']/tbody/tr").intValue();
+						if(TableRowCount > 1){
+							selenium.click("xpath=//table[@id='usermapped' and @class='tablesorter']/tbody/tr[1]/td[3][@class='blank']/a[ @class='goButton edit']");
+							Thread.sleep(1000);
+							try {
+								WebElement popup = driver.findElement(By.id("popupContact"));
+								if(popup.isDisplayed()){
+									bodyText ="<h3>Go to diary configuration check  Mapped table and  click to button edit  passed</h3><br>";
+									WriteLogFile.logger.info("Go to diary configuration check unMapped table and click to button edit  passed");
+								}else{
+									bodyText = "<h3 style=\"color:red\">Can't load  popup when click to button edit of Mapped table user in :"+ps.getDiary_configuration()+"</h3>";
+									WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getDiary_configuration());
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+							} catch (Exception e) {
+								bodyText = "<h3 style=\"color:red\">Can't load  popup when click to button edit of Mapped table user in :"+ps.getDiary_configuration()+"</h3>";
+								WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getDiary_configuration());
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+						}
+					}else{
+						bodyText = "<h3 style=\"color:red\">Can't load  mapped User table in :"+ps.getDiary_configuration()+"</h3>";
+						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getDiary_configuration());
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+				} catch (Exception e) {
+					bodyText = "<h3 style=\"color:red\">Can't load  mapped User table in :"+ps.getDiary_configuration()+"</h3>";
+					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getDiary_configuration());
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				/******** end check function of mapped user ********/
+				
+				/******* end checking Diary configuration ********/
+				
+				
+				/******* start checking Diary color configuration ****/
+				selenium.open(ps.getDiary_color_config());
+				Thread.sleep(3000);
+				if(selenium.isTextPresent("Colours")){
+					bodyText = "<h3>Go to diary colour configuration passeed</h3><br>";
+					WriteLogFile.logger.info("Go to diary color configuration passeed");
+				}else{
+					bodyText = "<h3 style=\"color:red\">Cannot open website "+ps.getDiary_color_config()+"</h3>";
+					WriteLogFile.logger.info("Server was broken. Can not open website :" +ps.getDiary_color_config());
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				/**** start checking table top ********/
+				try {
+					WebElement tableTop = driver.findElement(By.id("tableCasecode"));
+					if(tableTop.isDisplayed()){
+						int TableRowCount = selenium.getXpathCount("//table[@id='tableCasecode']/tbody/tr").intValue();
+						if(TableRowCount == 3){
+							try {
+								bodyText = "<h3>Go to diary colour configuration the table in top have 3 <tr> passeed</h3><br>";
+								WriteLogFile.logger.info("Go to diary color configuration the table in top have 3 <tr>  passeed");
+								WebElement buttonEditOfMouseOver = tableTop.findElement(By.xpath("table[@id='tableCasecode' and @class='tablesorter']/tbody/tr[1]/td[7][@class='blank']/a[@class='goButton editColor']"));
+								if(buttonEditOfMouseOver.isDisplayed()){
+									bodyText = "<h3 style=\"color:red\">THe button edit is display in the mouseover in :"+ps.getDiary_color_config()+"</h3>";
+									WriteLogFile.logger.info("THe button edit is display in the mouseover in:"+ps.getDiary_color_config());
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}else{
+									bodyText = "<h3>Go to diary colour configuration check the button edit is not display in the mouseover passeed</h3><br>";
+									WriteLogFile.logger.info("Go to diary color configuration check the button edit is not display in the mouseover passeed");
+								}
+							} catch (Exception e) {
+								bodyText = "<h3>Go to diary colour configuration check the button edit is not display in the mouseover passeed</h3><br>";
+								WriteLogFile.logger.info("Go to diary color configuration check the button edit is not display in the mouseover passeed");
+							}
+							
+							try {
+								WebElement buttonEditOfDisclosuer = tableTop.findElement(By.xpath("//table[@id='tableCasecode' and @class='tablesorter']/tbody/tr[2]/td[7][@class='blank']/a[@class='goButton editColor']"));
+								if(buttonEditOfDisclosuer.isDisplayed()){
+									bodyText = "<h3>Go to diary colour configuration check the button edit is display in the disclosure passeed</h3><br>";
+									WriteLogFile.logger.info("Go to diary color configuration check the button edit is display in the disclosure passeed");
+								}else{
+									bodyText = "<h3 style=\"color:red\">THe button edit is not display in the disclosure in :"+ps.getDiary_color_config()+"</h3>";
+									WriteLogFile.logger.info("THe button edit is not display in the disclosure in:"+ps.getDiary_color_config());
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+							} catch (Exception e) {
+								bodyText = "<h3 style=\"color:red\">THe button edit is not display in the disclosure in :"+ps.getDiary_color_config()+"</h3>";
+								WriteLogFile.logger.info("THe button edit is not display in the disclosure in:"+ps.getDiary_color_config());
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+							
+							try {
+								WebElement buttonEditOfpayroll = tableTop.findElement(By.xpath("//table[@id='tableCasecode' and @class='tablesorter']/tbody/tr[3]/td[7][@class='blank']/a[@class='goButton editColor']"));
+								if(buttonEditOfpayroll.isDisplayed()){
+									bodyText = "<h3>Go to diary colour configuration check the button edit is display in the payroll passeed</h3><br>";
+									WriteLogFile.logger.info("Go to diary color configuration check the button edit is display in the payroll passeed");
+								}else{
+									bodyText = "<h3 style=\"color:red\">THe button edit is not display in the payroll in :"+ps.getDiary_color_config()+"</h3>";
+									WriteLogFile.logger.info("THe button edit is not display in the payroll in:"+ps.getDiary_color_config());
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+							} catch (Exception e) {
+								bodyText = "<h3 style=\"color:red\">THe button edit is not display in the payroll in :"+ps.getDiary_color_config()+"</h3>";
+								WriteLogFile.logger.info("THe button edit is not display in the payroll in:"+ps.getDiary_color_config());
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+							
+						}else{
+							bodyText = "<h3 style=\"color:red\">The table top have more than 3 tr in :"+ps.getDiary_color_config()+"</h3>";
+							WriteLogFile.logger.info("The table top have more than 3 tr in :"+ps.getDiary_color_config());
+							SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+						}
+					}else{
+						bodyText = "<h3 style=\"color:red\">Can't load  table location top is not display in :"+ps.getDiary_color_config()+"</h3>";
+						WriteLogFile.logger.info("Can't load  table  location top is not display in :"+ps.getDiary_color_config());
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+				} catch (Exception e) {
+					bodyText = "<h3 style=\"color:red\">Can't load  table location top in :"+ps.getDiary_color_config()+"</h3>";
+					WriteLogFile.logger.info("Can't load  table  location top in :"+ps.getDiary_color_config());
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				/**** end checking table top *******/
+				
+				
+				/******* start checking table bottom *******/
+				try {
+					WebElement tableBottom = driver.findElement(By.id("tableCasecode1"));
+					if(tableBottom.isDisplayed()){
+						try {
+							
+							WebElement buttAdd = tableBottom.findElement(By.xpath("//table[@id='tableCasecode1' and @class='tablesorter']/thead/tr/th[8]/a[@id='addBtn' and @class='goButton addColor']"));
+							if(buttAdd.isDisplayed()){
+								bodyText = "<h3>Go to diary colour configuration check the button add is display in the table bottom passeed</h3><br>";
+								WriteLogFile.logger.info("Go to diary color configuration check the button edit is display in the table bottom passeed");
+							}else{
+								bodyText = "<h3 style=\"color:red\">THe button add is not display in the table bottom in :"+ps.getDiary_color_config()+"</h3>";
+								WriteLogFile.logger.info("THe button add is not display in the table bottom in: "+ps.getDiary_color_config());
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+						} catch (Exception e) {
+							bodyText = "<h3 style=\"color:red\">THe button add is not display in the table bottom in :"+ps.getDiary_color_config()+"</h3>";
+							WriteLogFile.logger.info("THe button add is not display in the table bottom in: "+ps.getDiary_color_config());
+							SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+						}
+					}else{
+						bodyText = "<h3 style=\"color:red\">Can't load  table location bottom in :"+ps.getDiary_color_config()+"</h3>";
+						WriteLogFile.logger.info("Can't load  table  location bottom in :"+ps.getDiary_color_config());
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+				} catch (Exception e) {
+					bodyText = "<h3 style=\"color:red\">Can't load  table location bottom in :"+ps.getDiary_color_config()+"</h3>";
+					WriteLogFile.logger.info("Can't load  table  location bottom in :"+ps.getDiary_color_config());
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				
+				
+				/******* end checking table bottom *******/
+				
+				/******* end checking Diary color configuration ****/
+				
+				/****** Start checking Diary_summary *****/
+				
+				selenium.open(ps.getDiary_summary());
+				Thread.sleep(2000);
+				if(selenium.isTextPresent("Diary summary")){
+					bodyText = "<h3>Go to diary summary passeed</h3><br>";
+					WriteLogFile.logger.info("Go to diary summary passeed");
+				}else{
+					bodyText = "<h3 style=\"color:red\">Cannot open website "+ps.getDiary_summary()+"</h3>";
+					WriteLogFile.logger.info("Server was broken. Can not open website :" +ps.getDiary_summary());
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				try {
+					String lastUpdated = selenium.getText("xpath=//div[@id='content']/div[@id='lastUpdated']");
+					if(lastUpdated.trim().length() == 0 || lastUpdated == null){
+						bodyText = "<h3 style=\"color:red\">The display of last updated null in "+ps.getDiary_summary()+ " </h3>";
+						WriteLogFile.logger.info("The display of last updated is null in :" +ps.getDiary_summary());
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}else{
+						bodyText = "<h3>Go to diary summary check last updated passeed</h3><br>";
+						WriteLogFile.logger.info("Go to diary summary check last updated passeed");
+					}
+					
+					String totalCase = selenium.getText("xpath=//div[@id='content']/div[@id='summary_content']/div[@id='headingContent']/ul[@id='summary_value_title']/li[1][@class='summary_total_case']");
+					if(totalCase.equalsIgnoreCase("Total Cases")){
+						bodyText = "<h3>Go to diary summary check total cases passeed</h3><br>";
+						WriteLogFile.logger.info("Go to diary summary check total cases passeed");
+					}else{
+						bodyText = "<h3 style=\"color:red\">The display of last updated"+ps.getDiary_summary()+ " is not right</h3>";
+						WriteLogFile.logger.info("The display of last updated in :" +ps.getDiary_summary() +" is not right");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+					
+					String slaStatus = selenium.getText("xpath=//ul[@id='summary_value_title']/li[2][@class='summary_title_li']/ul[@class='summary_sla_status']/li[1][@class='summary_title_top summary_title']/span");
+					System.out.println(slaStatus.trim());
+					if(slaStatus.trim().equalsIgnoreCase("SLA status")){
+						bodyText = "<h3>Go to diary summary check SLA status  passeed</h3><br>";
+						WriteLogFile.logger.info("Go to diary summary check SLA status passeed");
+					}else{
+						bodyText = "<h3 style=\"color:red\">The display of SLA status "+ps.getDiary_summary()+ " is not right</h3>";
+						WriteLogFile.logger.info("The display of SLA status in :" +ps.getDiary_summary() +" is not right");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+					
+					String workFlow = selenium.getText("xpath=//ul[@id='summary_value_title']/li[3][@class='summary_title_li']/ul[@class='summary_workflow_status']/li[1][@class='summary_title_top summary_title']/span");
+					System.out.println(workFlow.trim());
+					if(workFlow.equalsIgnoreCase("Workflow status")){
+						bodyText = "<h3>Go to diary summary check Workflow status  passeed</h3><br>";
+						WriteLogFile.logger.info("Go to diary summary check Workflow status passeed");
+					}else{
+						bodyText = "<h3 style=\"color:red\">The display of Workflow status "+ps.getDiary_summary()+ " is not right</h3>";
+						WriteLogFile.logger.info("The display of  Workflow  status in :" +ps.getDiary_summary() +" is not right");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+					}
+					
+					String deparment = selenium.getText("xpath=//div[@id='departmentTitle' and @class='summary_team_title round_border summary_team_bg']/div[1][@class='summary_team_title_des']/a");
+					if(deparment.equalsIgnoreCase("Department")){
+						bodyText = "<h3>Go to diary summary check Department passeed</h3><br>";
+						WriteLogFile.logger.info("Go to diary summary Department  passeed");
+					}else{
+						bodyText = "<h3 style=\"color:red\">The display of Department in " +ps.getDiary_summary()+ " is not right</h3>";
+						WriteLogFile.logger.info("The display of Department in :" +ps.getDiary_summary() +" is not right");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+					}
+				} catch (Exception e) {
+					bodyText = "<h3 style=\"color:red\">The display of "+ps.getDiary_summary()+ " is not right</h3>";
+					WriteLogFile.logger.info("The display of :" +ps.getDiary_summary() +" is not right");
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				/****** End checking Diary_summary *****/
+				
+				
+				/***** start checking Team management ********/
+					selenium.open(ps.getTeam_allocation_url());
+					Thread.sleep(2000);
+					if(selenium.isTextPresent("Team management")){
+						bodyText = "<h3>Go to Team management passeed</h3><br>";
+						WriteLogFile.logger.info("Go to Team management passeed");
+					}else{
+						bodyText = "<h3 style=\"color:red\">Cannot open website "+ps.getTeam_allocation_url()+"</h3>";
+						WriteLogFile.logger.info("Server was broken. Can not open website :" +ps.getTeam_allocation_url());
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+					
+					try {
+						
+						WebElement tableAllocation = driver.findElement(By.className("allocation_table_team_allocation"));
+						if(tableAllocation.isDisplayed()){
+							bodyText = "<h3>Go to Team management check table passeed</h3><br>";
+							WriteLogFile.logger.info("Go to Team management check table passeed");
+							int TableRowCount = selenium.getXpathCount("//table[@class='allocation_table_team_allocation']/tbody/tr").intValue();
+							if(TableRowCount > 1){
+								ArrayList<String> listUser = new ArrayList<String>();
+								for(int i = 2 ; i < TableRowCount+1 ; i++){
+									WebElement user = driver.findElement(By.xpath("//div[@id='team_allocation']/table[@class='allocation_table_team_allocation']/tbody/tr["+i+"][@class='allocation_user_row']/td[1]/div/a"));
+									listUser.add(user.getAttribute("title"));
+								}
+								if(listUser.size() > 0){
+									boolean checkDupplicate = false;
+									String userDupplicate = "";
+									for(int j = 0; j < listUser.size();j++){
+											if(j == listUser.size() - 1){
+												break;
+											}
+											if(listUser.get(j).equalsIgnoreCase(listUser.get(j+1))){
+												userDupplicate = listUser.get(j);
+												checkDupplicate = true;
+												break;
+											}
+									}
+									if(checkDupplicate){
+										bodyText = "<h3 style=\"color:red\">Dupplicated user "+  userDupplicate + " in :</h3>"  +ps.getTeam_allocation_url();
+										WriteLogFile.logger.info("Dupplicated user "+  userDupplicate + " in :"  +ps.getTeam_allocation_url());
+										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+									}else{
+										bodyText = "<h3>Go to Team management check dupplicated user passeed</h3><br>";
+										WriteLogFile.logger.info("Go to Team management check dupplicated user passeed");
+									}
+								}
+							}
+						}else{
+							bodyText = "<h3 style=\"color:red\">The display of tableAllocation "+ps.getTeam_allocation_url()+ " is not right</h3>";
+							WriteLogFile.logger.info("The display of tableAllocation: " +ps.getTeam_allocation_url() +" is not right");
+							SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+						}
+					} catch (Exception e) {
+						bodyText = "<h3 style=\"color:red\">The display of tableAllocation is missing in :</h3> "+ps.getTeam_allocation_url()+ " ";
+						WriteLogFile.logger.info("The display of tableAllocation is missing in: " + ps.getTeam_allocation_url() +" ");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+					
+				/***** end checking Team management ********/
+				
+					
+				/******* start checking payroll page ******/
+				selenium.open(ps.getPayroll_url());
+				Thread.sleep(1000);
+				if(selenium.isTextPresent("Payroll dates")){
+					bodyText = "<h3>Go to Payroll passeed</h3><br>";
+					WriteLogFile.logger.info("Go to Payroll passeed");
+				}else{
+					bodyText = "<h3 style=\"color:red\">Cannot open website "+ps.getPayroll_url()+"</h3>";
+					WriteLogFile.logger.info("Server was broken. Can not open website :" +ps.getPayroll_url());
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				try {
+					WebElement tablePayroll = driver.findElement(By.id("table_bank"));
+					if(tablePayroll.isDisplayed()){
+						try {
+							WebElement buttonAdd = tablePayroll.findElement(By.xpath("//td[@id='addRow' and @class='blank']/a[@class='goButton']"));
+							if(buttonAdd.isDisplayed()){
+								buttonAdd.click();
+								Thread.sleep(1000);
+								try {
+									WebElement popupAdd = driver.findElement(By.id("searchFormAdd"));
+									if(popupAdd.isDisplayed()){
+										WebElement dropdowDateMonth = popupAdd.findElement(By.id("dateMonth"));
+										List<WebElement> options = dropdowDateMonth.findElements(By.tagName("option"));
+										 int YearCurrent = Calendar.getInstance().get(Calendar.YEAR);
+										 String pastYear = Integer.toString(YearCurrent -1 );
+										 System.out.println(pastYear);
+										 String NextfurtureYear = Integer.toString(YearCurrent+2);
+										 System.out.println(NextfurtureYear);
+										 boolean checkYear = true;
+										 for(WebElement option : options){
+											 String year = option.getText().split("-")[1];
+											 System.out.println(year);
+											 if(year.equalsIgnoreCase(pastYear) || year.equalsIgnoreCase(NextfurtureYear)){
+												 checkYear = false;
+												 break;
+											 }
+										 }
+										 if(checkYear){
+											 	bodyText = "<h3>Go to Payroll check dropdowlist in popup when click add button passeed</h3><br>";
+												WriteLogFile.logger.info("Go to Payroll check dropdowlist in popup when click add button passeed");
+										 }else{
+												bodyText = "<h3 style=\"color:red\">The display of dropdown when click add button is wrong<h3>";
+												WriteLogFile.logger.info("The display of  dropdown when  add button is wrong");
+												SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+										 }
+									}else{
+										bodyText = "<h3 style=\"color:red\">The display of popup when click add button is missing<h3>";
+										WriteLogFile.logger.info("The display of  popup when  add button is missing");
+										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+									}
+								} catch (Exception e) {
+									bodyText = "<h3 style=\"color:red\">The display of popup when click add button is missing<h3>";
+									WriteLogFile.logger.info("The display of  popup when  add button is missing");
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+								}
+								
+								
+								
+							}else{
+								bodyText = "<h3 style=\"color:red\">The display of add button is missing<h3>";
+								WriteLogFile.logger.info("The display of add button is missing");
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+							}
+						} catch (Exception e) {
+							bodyText = "<h3 style=\"color:red\">The display of add button is missing<h3>";
+							WriteLogFile.logger.info("The display of add button is missing");
+							SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+						}
+						
+						int TableRowCount = selenium.getXpathCount("//table[@id='table_bank']/tbody/tr").intValue();
+						System.out.println(TableRowCount);
+						if(TableRowCount == 2){
+							String onlyPayroll = selenium.getText("xpath=//table[@id='table_bank']/tbody/tr[2]/td[2]");
+							System.out.println("date" + onlyPayroll);
+							DateFormat formatter =  new SimpleDateFormat("dd-MM-yy");
+							Date date1 = new Date();
+							String datetest = formatter.format(date1);
+							Date dateCur = (Date)formatter.parse(datetest);
+							Date date2 = (Date)formatter.parse(onlyPayroll.trim());
+							if(date2.after(dateCur)){
+								try {
+									WebElement buttonEdit = driver.findElement(By.xpath("//table[@id='table_bank']/tbody/tr[2]/td[3]/a"));
+									if(buttonEdit.isDisplayed()){
+										buttonEdit.click();
+										Thread.sleep(1000);
+										try {
+											WebElement popupEdit = driver.findElement(By.id("searchFormEdit"));
+											if(popupEdit.isDisplayed()){
+												bodyText = "<h3>Go to Payroll check dropdowlist in popup when click edit button passeed</h3><br>";
+												WriteLogFile.logger.info("Go to Payroll check dropdowlist in popup when click edit button passeed");
+											}else{
+												bodyText = "<h3 style=\"color:red\">The display of popup when click edit button is missing<h3>";
+												WriteLogFile.logger.info("The display of  popup when  edit button is missing");
+												SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+											}
+										} catch (Exception e) {
+											bodyText = "<h3 style=\"color:red\">The display of popup when click edit button is missing<h3>";
+											WriteLogFile.logger.info("The display of  popup when  edit button is missing");
+											SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+										}
+									}else{
+										bodyText = "<h3 style=\"color:red\">The display of edit button  is missing<h3>";
+										WriteLogFile.logger.info("The display of  edit button is missing");
+										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");		
+									}
+								} catch (Exception e) {
+									bodyText = "<h3 style=\"color:red\">The display of edit button  is missing<h3>";
+									WriteLogFile.logger.info("The display of  edit button is missing");
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");			
+								}
+								
+							}else{
+								bodyText = "<h3>Go to Payroll check  popup when click edit button because the payroll date is the past date not show the edit button passeed</h3><br>";
+								WriteLogFile.logger.info("Go to Payroll check  popup when click edit button because the payroll date is the past date not show the edit button passeed");	
+							}
+						}else if(TableRowCount > 2){
+							try {
+								WebElement buttonEdit = driver.findElement(By.xpath("//table[@id='table_bank']/tbody/tr[3]/td[3]/a"));
+								if(buttonEdit.isDisplayed()){
+									buttonEdit.click();
+									Thread.sleep(1000);
+									try {
+										WebElement popupEdit = driver.findElement(By.id("searchFormEdit"));
+										if(popupEdit.isDisplayed()){
+											bodyText = "<h3>Go to Payroll check dropdowlist in popup when click edit button passeed</h3><br>";
+											WriteLogFile.logger.info("Go to Payroll check dropdowlist in popup when click add button passeed");
+										}else{
+											bodyText = "<h3 style=\"color:red\">The display of popup when click edit button is missing<h3>";
+											WriteLogFile.logger.info("The display of  popup when  edit button is missing");
+											SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+										}
+									} catch (Exception e) {
+										bodyText = "<h3 style=\"color:red\">The display of popup when click edit button is missing<h3>";
+										WriteLogFile.logger.info("The display of  popup when  edit button is missing");
+										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+									}
+								}else{
+									bodyText = "<h3 style=\"color:red\">The display of edit button  is missing<h3>";
+									WriteLogFile.logger.info("The display of  edit button is missing");
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");		
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+								bodyText = "<h3 style=\"color:red\">The display of edit button  is missing<h3>";
+								WriteLogFile.logger.info("The display of  edit button is missing");
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+							}
+							
+						}else{
+							bodyText = "<h3>Go to Payroll check dropdowlist in popup when click edit button passeed</h3><br>";
+							WriteLogFile.logger.info("Go to Payroll check dropdowlist in popup when click add button passeed");
+						}
+					}else{
+						bodyText = "<h3 style=\"color:red\">The display of tablePayroll is missing<h3>";
+						WriteLogFile.logger.info("The display of tablePayroll is missing");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					bodyText = "<h3 style=\"color:red\">The display of tablePayroll is missing<h3>";
+					WriteLogFile.logger.info("The display of tablePayroll is missing");
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}	
+					
+					
+				/******** end checking payroll page *******/	
+				
+				/******** start checking bank holiday page *******/
+				
+				/******** end checking bank holiday page *******/
+				
+					
 			}
 			driver.quit();
 			

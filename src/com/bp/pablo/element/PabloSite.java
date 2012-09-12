@@ -3,6 +3,7 @@ package com.bp.pablo.element;
 public class PabloSite {
 	
 	String main_url;
+	String home_url;
 	String login_url;
 	String team_allocation_url;
 	String payroll_url;
@@ -10,7 +11,41 @@ public class PabloSite {
 	String session_Management_url;
 	String datasource_config_url;
 	String mainview_diary_url;
-	
+	String dropbox_url;
+	String diary_configuration;
+	String diary_color_config;
+	String diary_summary;
+
+	public String getDiary_summary() {
+		return diary_summary;
+	}
+	public void setDiary_summary(String diary_summary) {
+		this.diary_summary = diary_summary;
+	}
+	public String getDiary_color_config() {
+		return diary_color_config;
+	}
+	public void setDiary_color_config(String diary_color_config) {
+		this.diary_color_config = diary_color_config;
+	}
+	public String getDiary_configuration() {
+		return diary_configuration;
+	}
+	public void setDiary_configuration(String diary_configuration) {
+		this.diary_configuration = diary_configuration;
+	}
+	public String getHome_url() {
+		return home_url;
+	}
+	public void setHome_url(String home_url) {
+		this.home_url = home_url;
+	}
+	public String getDropbox_url() {
+		return dropbox_url;
+	}
+	public void setDropbox_url(String dropbox_url) {
+		this.dropbox_url = dropbox_url;
+	}
 	public String getMain_url() {
 		return main_url;
 	}

@@ -33,6 +33,7 @@ public class IOUTIL {
 				return null;
 			} catch (IOException e2) {
 				e2.printStackTrace();
+				SendMailSSL.sendMailCMG("<h3>account.properties is null!</h3>", "File account.properties is null");
 				return null;
 			}
 		 }else{
@@ -43,7 +44,7 @@ public class IOUTIL {
 	}
 	
 	public static PabloSite loadAllUrl(){
-		File f = new File("pablo_site.properties");
+		File f = new File("site.properties");
 		if(f.exists()){
 			try {
 				PabloSite ps = new PabloSite();
@@ -53,12 +54,22 @@ public class IOUTIL {
 				pro.load(in);
 				ps.setMain_url(pro.getProperty("main_url"));
 				ps.setLogin_url(pro.getProperty("login_url"));
+				ps.setDropbox_url(pro.getProperty("dropbox_url"));
+				ps.setMainview_diary_url(pro.getProperty("diary_center"));
+				ps.setHome_url(pro.getProperty("home_url"));
+				ps.setDiary_configuration(pro.getProperty("diary_configuration"));
+				ps.setDiary_color_config(pro.getProperty("diary_color_config"));
+				ps.setDiary_summary(pro.getProperty("diary_summary"));
+				ps.setTeam_allocation_url(pro.getProperty("team_allocation_url"));
+				ps.setPayroll_url(pro.getProperty("payroll_url"));
+				ps.setBank_holiday_url(pro.getProperty("bank_holiday_url"));
+				
 				return ps;
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				return null;
 			} catch (IOException e) {
-				e.printStackTrace();
+				SendMailSSL.sendMailCMG("<h3>pablo_site.properties is null!</h3>", "file site.properties is null");
 				return null;
 			}
 		}else{
