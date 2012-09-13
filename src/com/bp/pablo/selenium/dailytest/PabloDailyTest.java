@@ -713,10 +713,8 @@ public class PabloDailyTest {
 						}
 						
 						int TableRowCount = selenium.getXpathCount("//table[@id='table_bank']/tbody/tr").intValue();
-						System.out.println(TableRowCount);
 						if(TableRowCount == 2){
 							String onlyPayroll = selenium.getText("xpath=//table[@id='table_bank']/tbody/tr[2]/td[2]");
-							System.out.println("date" + onlyPayroll);
 							DateFormat formatter =  new SimpleDateFormat("dd-MM-yy");
 							Date date1 = new Date();
 							String datetest = formatter.format(date1);
@@ -1289,7 +1287,6 @@ public class PabloDailyTest {
 						int tableRow = selenium.getXpathCount("//div[@id='dropbox_configuration']/div[1][@class='dropbox_configuration_left_content']/table/tbody/tr").intValue();
 						if(tableRow == 5){
 							String defaultValue = selenium.getText("xpath=//span[@id='defaultFileExpiryVal' and @class='view_value']");
-							System.out.println(defaultValue);
 							if(defaultValue.equalsIgnoreCase("90 days")){
 								bodyText = "<h3>Go to dropbox configuration page the value is 90 passed</h3><br>";
 								WriteLogFile.logger.info("<h3>Go to dropbox configuration the value is 90 page passed");
