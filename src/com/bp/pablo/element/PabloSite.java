@@ -15,7 +15,20 @@ public class PabloSite {
 	String diary_configuration;
 	String diary_color_config;
 	String diary_summary;
-
+	String dropbox_administrator;
+	String dropbox_configuration;
+	public String getDropbox_configuration() {
+		return dropbox_configuration;
+	}
+	public void setDropbox_configuration(String dropbox_configuration) {
+		this.dropbox_configuration = dropbox_configuration;
+	}
+	public String getDropbox_administrator() {
+		return dropbox_administrator;
+	}
+	public void setDropbox_administrator(String dropbox_administrator) {
+		this.dropbox_administrator = dropbox_administrator;
+	}
 	public String getDiary_summary() {
 		return diary_summary;
 	}

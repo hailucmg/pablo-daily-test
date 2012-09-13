@@ -63,7 +63,9 @@ public class IOUTIL {
 				ps.setTeam_allocation_url(pro.getProperty("team_allocation_url"));
 				ps.setPayroll_url(pro.getProperty("payroll_url"));
 				ps.setBank_holiday_url(pro.getProperty("bank_holiday_url"));
-				
+				ps.setDropbox_url(pro.getProperty("dropbox_url"));
+				ps.setDropbox_administrator(pro.getProperty("dropbox_administrator"));
+				ps.setDropbox_configuration(pro.getProperty("dropbox_configuration"));
 				return ps;
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

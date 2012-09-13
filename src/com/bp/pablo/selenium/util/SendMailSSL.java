@@ -52,7 +52,7 @@ public class SendMailSSL {
             try {
 				message.setFrom(new InternetAddress("lan.ta@c-mg.com"));
 				message.setRecipients(Message.RecipientType.TO,
-			    InternetAddress.parse("pablo@c-mg.com"));
+			    InternetAddress.parse("huong.vu@c-mg.com"));
 			    message.setSubject(subject);
 			    message.setContent(body, "text/html");
 			    Transport.send(message);
@@ -70,8 +70,8 @@ public class SendMailSSL {
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
-			}
-           */
+			}*/
+           
         
     }
 

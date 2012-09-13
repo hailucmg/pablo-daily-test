@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -746,13 +747,13 @@ public class PabloDailyTest {
 											SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
 										}
 									}else{
-										bodyText = "<h3 style=\"color:red\">The display of edit button  is missing<h3>";
-										WriteLogFile.logger.info("The display of  edit button is missing");
-										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");		
+										bodyText = "<h3 style=\"color:red\">The display of  edit button in payroll is missing<h3>";
+										WriteLogFile.logger.info("The display of  edit button in payroll is missing");
+										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");				
 									}
 								} catch (Exception e) {
-									bodyText = "<h3 style=\"color:red\">The display of edit button  is missing<h3>";
-									WriteLogFile.logger.info("The display of  edit button is missing");
+									bodyText = "<h3 style=\"color:red\">The display of  edit button in payroll is missing<h3>";
+									WriteLogFile.logger.info("The display of  edit button in payroll is missing");
 									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");			
 								}
 								
@@ -772,13 +773,13 @@ public class PabloDailyTest {
 											bodyText = "<h3>Go to Payroll check dropdowlist in popup when click edit button passeed</h3><br>";
 											WriteLogFile.logger.info("Go to Payroll check dropdowlist in popup when click add button passeed");
 										}else{
-											bodyText = "<h3 style=\"color:red\">The display of popup when click edit button is missing<h3>";
-											WriteLogFile.logger.info("The display of  popup when  edit button is missing");
+											bodyText = "<h3 style=\"color:red\">The display of popup when click edit button in payroll is missing<h3>";
+											WriteLogFile.logger.info("The display of  popup when  edit button in payroll is missing");
 											SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
 										}
 									} catch (Exception e) {
-										bodyText = "<h3 style=\"color:red\">The display of popup when click edit button is missing<h3>";
-										WriteLogFile.logger.info("The display of  popup when  edit button is missing");
+										bodyText = "<h3 style=\"color:red\">The display of popup when click edit button in payroll is missing<h3>";
+										WriteLogFile.logger.info("The display of  popup when  edit button in payroll is missing");
 										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
 									}
 								}else{
@@ -788,8 +789,8 @@ public class PabloDailyTest {
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
-								bodyText = "<h3 style=\"color:red\">The display of edit button  is missing<h3>";
-								WriteLogFile.logger.info("The display of  edit button is missing");
+								bodyText = "<h3 style=\"color:red\">The display of edit button in payroll  is missing<h3>";
+								WriteLogFile.logger.info("The display of  edit button in payroll is missing");
 								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
 							}
 							
@@ -813,10 +814,514 @@ public class PabloDailyTest {
 				/******** end checking payroll page *******/	
 				
 				/******** start checking bank holiday page *******/
+				selenium.open(ps.getBank_holiday_url());
+				Thread.sleep(1000);
+				if(selenium.isTextPresent("Bank holidays")){
+					bodyText = "<h3>Go to Bank holiday passeed</h3><br>";
+					WriteLogFile.logger.info("Go to Bank holiday passeed");
+				}else{
+					bodyText = "<h3 style=\"color:red\">Cannot open website "+ps.getBank_holiday_url()+"</h3>";
+					WriteLogFile.logger.info("Server was broken. Can not open website :" +ps.getBank_holiday_url());
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				try {
+					WebElement tableBank = driver.findElement(By.id("table_bank"));
+					if(tableBank.isDisplayed()){
+						try {
+							WebElement buttonAdd = tableBank.findElement(By.xpath("//td[@id='addRow' and @class='blank']/a[@class='goButton']"));
+							if(buttonAdd.isDisplayed()){
+								buttonAdd.click();
+								Thread.sleep(1000);
+								try {
+									WebElement popupAdd = driver.findElement(By.id("searchFormAdd"));
+									if(popupAdd.isDisplayed()){
+										try {
+											WebElement submitButton = popupAdd.findElement(By.id("submitButton"));
+											if(submitButton.isDisplayed()){
+												bodyText = "<h3>Go to Bank holiday test function Add button is show popup passeed</h3><br>";
+												WriteLogFile.logger.info("Go to Bank holiday test function Add button is show popup passeed");
+											}else{
+												bodyText = "<h3 style=\"color:red\">The display of submit button in popup when click Add button in bank holiday  is missing<h3>";
+												WriteLogFile.logger.info("The display of submit button in popup when click Add button in bank holiday  is missing");
+												SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+											}
+										} catch (Exception e) {
+											bodyText = "<h3 style=\"color:red\">The display of submit button in popup when click Add button in bank holiday  is missing<h3>";
+											WriteLogFile.logger.info("The display of submit button in popup when click Add button in bank holiday  is missing");
+											SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+										}
+										
+										
+									}else{
+										bodyText = "<h3 style=\"color:red\">The display of popup when click add button in bank holiday is missing<h3>";
+										WriteLogFile.logger.info("The display of  popup when  add button in bank holiday is missing");
+										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+									}
+								} catch (Exception e) {
+									bodyText = "<h3 style=\"color:red\">The display of popup when click add button in bank holiday is missing<h3>";
+									WriteLogFile.logger.info("The display of  popup when  add button in bank holiday is missing");
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+								
+								
+							}else{
+								bodyText = "<h3 style=\"color:red\">The display of add button in bank holiday  is missing<h3>";
+								WriteLogFile.logger.info("The display of  add button in bank holiday is missing");
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+							}
+						} catch (Exception e) {
+							bodyText = "<h3 style=\"color:red\">The display of add button in bank holiday  is missing<h3>";
+							WriteLogFile.logger.info("The display of  add button in bank holiday is missing");
+							SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+						}
+						
+						int TableRowCount = selenium.getXpathCount("//table[@id='table_bank']/tbody/tr").intValue();
+						if(TableRowCount > 1){
+							try {
+								WebElement buttonEdit = driver.findElement(By.xpath("//div[@id='table_info']/table[@id='table_bank']/tbody/tr[2]/td[3][@class='blank']/a[@class='goButton']"));
+								if(buttonEdit.isDisplayed()){
+									buttonEdit.click();
+									Thread.sleep(1000);
+									try {
+										WebElement popupEdit = driver.findElement(By.id("searchFormEdit"));
+										if(popupEdit.isDisplayed()){
+											try {
+												WebElement buttonUpdate = driver.findElement(By.xpath("//div[@id='searchFormDiv']/table/tbody/tr[3]/td[@id='checktd' and @class='blank']/a"));
+												if(buttonUpdate.isDisplayed()){
+													bodyText = "<h3>Go to Bank holiday all funciton passed</h3><br>";
+													WriteLogFile.logger.info("Go to Bank holiday all function is passed");
+												}else{
+													System.out.println("gogo");
+													bodyText = "<h3 style=\"color:red\">The display of update button in popop when click EDIT button in bank holiday  is missing<h3>";
+													WriteLogFile.logger.info("The display of update button in popop when click EDIT button in bank holiday  is missing");
+													SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+												}
+											} catch (Exception e) {
+												bodyText = "<h3 style=\"color:red\">The display of update button in popop when click EDIT button in bank holiday  is missing<h3>";
+												WriteLogFile.logger.info("The display of update button in popop when click EDIT button in bank holiday  is missing");
+												SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+											}
+										}else{
+											bodyText = "<h3 style=\"color:red\">The display of popup when click eidt button in bank holiday is missing<h3>";
+											WriteLogFile.logger.info("The display of  popup when  edit button in bank holiday is missing");
+											SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+										}
+									} catch (Exception e) {
+										bodyText = "<h3 style=\"color:red\">The display of popup when click eidt button in bank holiday is missing<h3>";
+										WriteLogFile.logger.info("The display of  popup when  edit button in bank holiday is missing");
+										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+									}
+									
+								}else{
+									bodyText = "<h3 style=\"color:red\">The display of edit button in bank holiday  is missing<h3>";
+									WriteLogFile.logger.info("The display of  edit button in bank holiday is missing");
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+							} catch (Exception e) {
+								bodyText = "<h3 style=\"color:red\">The display of edit button in bank holiday  is missing<h3>";
+								WriteLogFile.logger.info("The display of  edit button in bank holiday is missing");
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+						}else{
+							bodyText = "<h3>Go to Bank holiday there was no bank holidays in table so we can't check the function edit ! Other function is passed</h3><br>";
+							WriteLogFile.logger.info("Go to Bank holiday there was no bank holidays in table so we can't check the function edit ! Other function is passed");
+						}
+					}else{
+						bodyText = "<h3 style=\"color:red\">The display of table bank holiday is missing<h3>";
+						WriteLogFile.logger.info("The display of table bank holiday is missing");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+				} catch (Exception e) {
+					bodyText = "<h3 style=\"color:red\">The display of table bank holiday is missing<h3>";
+					WriteLogFile.logger.info("The display of table bank holiday is missing");
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
 				
 				/******** end checking bank holiday page *******/
 				
+				
+				/****** start checking administrator dropbox *****/
+				
+				selenium.open(ps.getDropbox_administrator());
+				
+				Thread.sleep(2000);
+				String dropboxRandom = null;
+				if(selenium.isTextPresent("Drop box administration")){
+					bodyText = "<h3>Go to dropbox administrator passed</h3><br>";
+					WriteLogFile.logger.info("<h3>Go to dropbox administrator passed");
+				}else{
+					bodyText = "<h3 style=\"color:red\">Cannot open website :"+ ps.getDropbox_administrator() + "<h3>";
+					WriteLogFile.logger.info("Cannot open website :"+ ps.getDropbox_administrator() + "<h3>");
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				try {
+					WebElement tableAdmin = driver.findElement(By.id("dropbox"));
+					if(tableAdmin.isDisplayed()){
+						try {
+							WebElement buttonAddDropbox = tableAdmin.findElement(By.id("btnAdd"));
+							if(buttonAddDropbox.isDisplayed()){
+								buttonAddDropbox.click();
+								Thread.sleep(1000);
+								try {
+									WebElement popupAddDropbox = driver.findElement(By.id("addDropUser"));
+									if(popupAddDropbox.isDisplayed()){
+										int TableRowCount = selenium.getXpathCount("//table[@id='tblAddDropbox']/tbody/tr").intValue();
+										if(TableRowCount >= 5){
+											try {
+												WebElement selectDuration = driver.findElement(By.id("duration_days"));
+												List<WebElement> options = selectDuration.findElements(By.tagName("option"));
+												if(options.isEmpty() || options.size() == 0){
+													bodyText = "<h3 style=\"color:red\">The select duration in add dropbox popup is null <h3>";
+													WriteLogFile.logger.info("The select durations in add dropbox popup is null");
+													SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+												}else{
+													selectDuration.click();
+													bodyText = "<h3>Go to dropbox administrator check select duration passed</h3><br>";
+													WriteLogFile.logger.info("<h3>Go to dropbox administrator passed");
+												}
+											} catch (Exception e) {
+												bodyText = "<h3 style=\"color:red\">The select duration in add dropbox popup is null <h3>";
+												WriteLogFile.logger.info("The select durations in add dropbox popup is null");
+												SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+											}
+											try {
+												WebElement selectOwner = driver.findElement(By.id("slOwner"));
+												List<WebElement> options = selectOwner.findElements(By.tagName("option"));
+												if(options.isEmpty() || options.size() == 0){
+													bodyText = "<h3 style=\"color:red\">The select owner in add dropbox popup is null <h3>";
+													WriteLogFile.logger.info("The select owner in add dropbox popup is null");
+													SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+												}else{
+													selectOwner.click();
+													Thread.sleep(1000);
+													buttonAddDropbox.click();
+													Thread.sleep(1000);
+													bodyText = "<h3>Go to dropbox administrator check select owner passed</h3><br>";
+													WriteLogFile.logger.info("<h3>Go to dropbox administrator passed");
+												}
+											} catch (Exception e) {
+												bodyText = "<h3 style=\"color:red\">The select owner in add dropbox popup is null <h3>";
+												WriteLogFile.logger.info("The select owner in add dropbox popup is null");
+												SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+											}
+											
+											
+										}else{
+											bodyText = "<h3 style=\"color:red\">The display of table in popup add dropbox when click Add button in dropbox administrator is wrong<h3>";
+											WriteLogFile.logger.info("The display of table in popup add dropbox when click Add button in dropbox administrator is wrong");
+											SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+										}
+									}else{
+										bodyText = "<h3 style=\"color:red\">The display of popup add dropbox when click Add button in dropbox administrator is missing<h3>";
+										WriteLogFile.logger.info("The display of popup add dropbox when click Add button in dropbox administrator is missing");
+										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+									}
+								} catch (Exception e) {
+									bodyText = "<h3 style=\"color:red\">The display of popup add dropbox when click Add button in dropbox administrator is missing<h3>";
+									WriteLogFile.logger.info("The display of popup add dropbox when click Add button in dropbox administrator is missing");
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+							}else{
+								bodyText = "<h3 style=\"color:red\">The button add dropbox in dropbox administrator is missing<h3>";
+								WriteLogFile.logger.info("The button add  dropbox in dropbox administrator is missing");
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+						} catch (Exception e) {
+							bodyText = "<h3 style=\"color:red\">The button add dropbox in dropbox administrator is missing<h3>";
+							WriteLogFile.logger.info("The button add  dropbox in dropbox administrator is missing");
+							SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+						}
+						
+						int TableRowCount = selenium.getXpathCount("//table[@id='dropbox']/tbody/tr").intValue();
+						if(TableRowCount > 0){
+							try {
+								dropboxRandom = selenium.getText("xpath=//table[@id='dropbox' and @class='tablesorter']/tbody/tr[1]/td[2]");
+								WebElement buttonAddUser = driver.findElement(By.xpath("//table[@id='dropbox' and @class='tablesorter']/tbody/tr[1]/td[5][@class='blank']/input[@class='dropboxInfo']"));
+								if(buttonAddUser.isDisplayed()){
+									buttonAddUser.click();
+									Thread.sleep(1000);
+									try {
+										WebElement popupAddUser = driver.findElement(By.id("editDropUser"));
+										if(popupAddUser.isDisplayed()){
+											try {
+												WebElement btnAddUser = popupAddUser.findElement(By.id("btnAddUser"));
+												if(btnAddUser.isDisplayed()){
+													btnAddUser.click();
+													Thread.sleep(2000);
+													WebElement viewDropUser = driver.findElement(By.id("viewDropUser"));
+													if(viewDropUser.isDisplayed()){
+														selenium.type("listMail", "lan.ta@c-mg.com");
+														selenium.click("btnCheckMail");
+														Thread.sleep(5000);
+														WebElement tableShow = driver.findElement(By.id("MailUsertbl"));
+														if(tableShow.isDisplayed()){
+															bodyText = "<h3>Go to dropbox administrator all funciton passed</h3><br>";
+															WriteLogFile.logger.info("Go to dropbox administrator all function is passed");
+														}else{
+															bodyText = "<h3 style=\"color:red\">The table when click btnCheckMail in dropbox administrator is missing<h3>";
+															WriteLogFile.logger.info("The table when click btnCheckMail in dropbox administrator is missing");
+															SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+														}
+													}else{
+														bodyText = "<h3 style=\"color:red\">The popup when click btnAddUser in dropbox administrator is missing<h3>";
+														WriteLogFile.logger.info("The popup when click btnAddUser in dropbox administrator is missing");
+														SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+													}
+												}else{
+													bodyText = "<h3 style=\"color:red\">The button btnAddUser  in dropbox administrator is missing<h3>";
+													WriteLogFile.logger.info("The button btnAddUser in dropbox administrator is missing");
+													SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+												}
+											} catch (Exception e) {
+												bodyText = "<h3 style=\"color:red\">There are some error in function add user to dropbox<h3>";
+												WriteLogFile.logger.info("There are some error in function add user to dropbox");
+												SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+											}
+										}else{
+											bodyText = "<h3 style=\"color:red\">The display of popup add user when click Add user to dropbox in dropbox administrator is missing<h3>";
+											WriteLogFile.logger.info("The display of popup add user when click Add user to dropbox in dropbox administrator is missing");
+											SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+										}
+									} catch (Exception e) {
+										bodyText = "<h3 style=\"color:red\">The display of popup add user when click Add user to dropbox in dropbox administrator is missing<h3>";
+										WriteLogFile.logger.info("The display of popup add user when click Add user to dropbox in dropbox administrator is missing");
+										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+									}
+								}else{
+									bodyText = "<h3 style=\"color:red\">The button add user to dropbox in dropbox administrator is missing<h3>";
+									WriteLogFile.logger.info("The button add user in dropbox administrator is missing");
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+							} catch (Exception e) {
+								bodyText = "<h3 style=\"color:red\">The button add user to dropbox in dropbox administrator is missing<h3>";
+								WriteLogFile.logger.info("The button add user in dropbox administrator is missing");
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+						}else{
+							bodyText = "<h3>Go to dropbox administrator can't not check function add user because in this moment there are no dropbox!Other function is passed</h3><br>";
+							WriteLogFile.logger.info("<h3>Go to dropbox administrator can't not check function add user because in this moment there are no dropbox!Other function is passed");
+						}
+						
+					}else{
+						bodyText = "<h3 style=\"color:red\">The table in dropbox administrator is missing<h3>";
+						WriteLogFile.logger.info("The table in dropbox administrator is missing");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+				} catch (Exception e) {
+					bodyText = "<h3 style=\"color:red\">The table in dropbox administrator is missing<h3>";
+					WriteLogFile.logger.info("The table in dropbox administrator is missing");
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				
+				
+				/****** end checking administrator dropbox *****/
+				
+				
+				/****** start checking dropboxes ********/
+				selenium.open(ps.getDropbox_url());
+				Thread.sleep(1000);
+				if(selenium.isTextPresent("Dropboxes")){
+					bodyText = "<h3>Go to dropbox download page passed</h3><br>";
+					WriteLogFile.logger.info("<h3>Go to dropbox download page passed");
+				}else{
+					bodyText = "<h3 style=\"color:red\">Cannot open website :"+ ps.getDropbox_url() + "<h3>";
+					WriteLogFile.logger.info("Cannot open website :"+ ps.getDropbox_url() + "<h3>");
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				if(dropboxRandom == null || dropboxRandom.trim().length() == 0){
+					String notifi = selenium.getText("xpath=//div[@id='content']/div");
+					if(notifi.equalsIgnoreCase("No dropbox found.")){
+						bodyText = "<h3>Go to dropbox download page passed,there is no dropbox so we can't check main function</h3><br>";
+						WriteLogFile.logger.info("<h3>Go to dropbox download page passed,there is no dropbox so we can't check main function");
+					}else{
+						bodyText = "<h3 style=\"color:red\">There are some error(when no dropbox found) in " +ps.getDropbox_url();
+						WriteLogFile.logger.info("There are some error(when no dropbox found) in :"+ ps.getDropbox_url() + "<h3>");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+				}else{
+					try {
+						WebElement listOfDroboxes = driver.findElement(By.id("dropbox_list_sl"));
+						if(listOfDroboxes.isDisplayed()){
+							boolean checkExistDropbox = false;
+							List<WebElement> options = listOfDroboxes.findElements(By.tagName("option"));
+							if(options.size() > 0){
+								for(WebElement opt : options){
+									if(opt.getText().equalsIgnoreCase(dropboxRandom)){
+										checkExistDropbox = true;
+									}
+								}
+								if(!checkExistDropbox){
+									bodyText = "<h3 style=\"color:red\">Data in the dropdowlist of dropbox is not equal with dropbox administrator in " +ps.getDropbox_url();
+									WriteLogFile.logger.info("Data in the dropdowlist of dropbox is not equal with dropbox administrator  in :"+ ps.getDropbox_url() + "<h3>");
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}else{
+									bodyText = "<h3>Go to dropbox download page check dropdowlist passed</h3><br>";
+									WriteLogFile.logger.info("<h3>Go to dropbox download page check dropdowlist passed");
+								}
+							}else{
+								bodyText = "<h3 style=\"color:red\">Can not find any data in the dropdowlist of dropbox in " +ps.getDropbox_url();
+								WriteLogFile.logger.info("Can not find any data in the dropdowlist of dropbox in :"+ ps.getDropbox_url() + "<h3>");
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+						}else{
+							bodyText = "<h3 style=\"color:red\">Can not find the dropdowlist of dropbox in " +ps.getDropbox_url();
+							WriteLogFile.logger.info("Can not find the dropdowlist of dropbox in :"+ ps.getDropbox_url() + "<h3>");
+							SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+						}
+					} catch (Exception e) {
+						bodyText = "<h3 style=\"color:red\">Can not find the dropdowlist of dropbox in " +ps.getDropbox_url();
+						WriteLogFile.logger.info("Can not find the dropdowlist of dropbox in :"+ ps.getDropbox_url() + "<h3>");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
 					
+					try {
+						WebElement DisplayUpload = driver.findElement(By.id("file_drop_zone"));
+						if(DisplayUpload.isDisplayed()){
+							try {
+								WebElement buttonUpload = DisplayUpload.findElement(By.id("file_input_drop"));
+								String type = buttonUpload.getAttribute("type");
+								if(type.equalsIgnoreCase("file")){
+									bodyText = "<h3>Go to dropbox download page check button upload passed</h3><br>";
+									WriteLogFile.logger.info("<h3>Go to dropbox download page check button upload passed");
+								}else{
+									bodyText = "<h3 style=\"color:red\">In side The upload file have some error like the button of upload is not type = file : " +ps.getDropbox_url();
+									WriteLogFile.logger.info("In side The upload file have some error like the button of upload is not type = file : " +ps.getDropbox_url());
+									SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+							} catch (Exception e) {
+								bodyText = "<h3 style=\"color:red\">In side The upload file have some error : " +ps.getDropbox_url();
+								WriteLogFile.logger.info("Inside The upload file have some error  :"+ ps.getDropbox_url() + "<h3>");
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+						}else{
+							bodyText = "<h3 style=\"color:red\">Can not find the location of upload file  : " +ps.getDropbox_url();
+							WriteLogFile.logger.info("Can not find the location of upload file  :"+ ps.getDropbox_url() + "<h3>");
+							SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
+						}
+					} catch (Exception e) {
+						bodyText = "<h3 style=\"color:red\">The upload file have some error : " +ps.getDropbox_url();
+						WriteLogFile.logger.info("The upload file have some error  :"+ ps.getDropbox_url() + "<h3>");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+					
+					try {
+						WebElement tableDownload = driver.findElement(By.id("dropbox"));
+						if(tableDownload.isDisplayed()){
+							int TableRowCount = selenium.getXpathCount("//table[@id='dropbox']/tbody/tr").intValue();
+							if(TableRowCount > 0){
+								String filetext = selenium.getText("xpath=//table[@id='dropbox' and @class='tablesorter']/tbody/tr[1]/td[2]");
+								if(filetext.equalsIgnoreCase("No file found.")){
+									bodyText = "<h3>Go to dropbox download page check table download passed</h3><br>";
+									WriteLogFile.logger.info("<h3>Go to dropbox download page check table download passed");
+								}else{
+									try {
+										WebElement inforButton = driver.findElement(By.xpath("//table[@id='dropbox' and @class='tablesorter']/tbody/tr[1]/td[1]/input[1][@class='dropbox_info']"));
+										if(inforButton.isDisplayed()){
+											inforButton.click();
+											Thread.sleep(2000);
+											try {
+												WebElement popupInfor = driver.findElement(By.id("dropbox_file_info"));
+												if(popupInfor.isDisplayed()){
+													int rowInsde = selenium.getXpathCount("//div[@id='dropbox_file_info']/div[2][@class='dropbox_file_info_mid']/table/tbody/tr").intValue();
+													if(rowInsde == 3){
+														bodyText = "<h3>Go to dropbox download page, the popup infor is passed</h3><br>";
+														WriteLogFile.logger.info("<h3>Go to dropbox download page, the popup infor is passed");
+													}else{
+														bodyText = "<h3 style=\"color:red\">The table of infor popup have " + rowInsde +" <tr> : " +ps.getDropbox_url();
+														WriteLogFile.logger.info("The table of infor popup have " + rowInsde +" <tr> : " +ps.getDropbox_url());
+														SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+													}
+												}else{
+													bodyText = "<h3 style=\"color:red\">Can not find the popup infor when click to the button infor in table download : " +ps.getDropbox_url();
+													WriteLogFile.logger.info("Can not find the popup infor when click to the button infor in table download :"+ ps.getDropbox_url() + "<h3>");
+													SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+												}
+											} catch (Exception e) {
+												bodyText = "<h3 style=\"color:red\">Can not find the popup infor when click to the button infor in table download : " +ps.getDropbox_url();
+												WriteLogFile.logger.info("Can not find the popup infor when click to the button infor in table download :"+ ps.getDropbox_url() + "<h3>");
+												SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+											}
+										}else{
+											bodyText = "<h3 style=\"color:red\">Can not find the button infor in table download : " +ps.getDropbox_url();
+											WriteLogFile.logger.info("Can not find the button infor in table download  :"+ ps.getDropbox_url() + "<h3>");
+											SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+										}
+									} catch (Exception e) {
+										bodyText = "<h3 style=\"color:red\">Can not find the button infor in table download : " +ps.getDropbox_url();
+										WriteLogFile.logger.info("Can not find the button infor in table download  :"+ ps.getDropbox_url() + "<h3>");
+										SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+									}
+									
+								}
+							}
+						}else{
+							bodyText = "<h3 style=\"color:red\">Can not find the table of download : " +ps.getDropbox_url();
+							WriteLogFile.logger.info("Can not find the table of download  :"+ ps.getDropbox_url() + "<h3>");
+							SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+						}
+					} catch (Exception e) {
+						bodyText = "<h3 style=\"color:red\">Can not find the table of download : " +ps.getDropbox_url();
+						WriteLogFile.logger.info("Can not find the table of download  :"+ ps.getDropbox_url() + "<h3>");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+					
+					
+				}
+				
+				/****** end checking dropboxes ********/
+				
+				
+				/******* start checking dropbox configuration *******/
+				selenium.open(ps.getDropbox_configuration());
+				Thread.sleep(1000);
+				if(selenium.isTextPresent("Dropbox configuration")){
+					bodyText = "<h3>Go to dropbox configuration page passed</h3><br>";
+					WriteLogFile.logger.info("<h3>Go to dropbox configuration page passed");
+				}else{
+					bodyText = "<h3 style=\"color:red\">Cannot open website :"+ ps.getDropbox_configuration() + "<h3>";
+					WriteLogFile.logger.info("Cannot open website :"+ ps.getDropbox_configuration() + "<h3>");
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				try {
+					WebElement table = driver.findElement(By.xpath("//div[@id='dropbox_configuration']/div[1][@class='dropbox_configuration_left_content']/table"));
+					if(table.isDisplayed()){
+						int tableRow = selenium.getXpathCount("//div[@id='dropbox_configuration']/div[1][@class='dropbox_configuration_left_content']/table/tbody/tr").intValue();
+						if(tableRow == 5){
+							String defaultValue = selenium.getText("xpath=//span[@id='defaultFileExpiryVal' and @class='view_value']");
+							System.out.println(defaultValue);
+							if(defaultValue.equalsIgnoreCase("90 days")){
+								bodyText = "<h3>Go to dropbox configuration page the value is 90 passed</h3><br>";
+								WriteLogFile.logger.info("<h3>Go to dropbox configuration the value is 90 page passed");
+							}else{
+								bodyText = "<h3 style=\"color:red\">the value default is not equal with 90 in table configuration: " +ps.getDropbox_configuration();
+								WriteLogFile.logger.info("the value default is not equal with 90 in table configuration:"+ ps.getDropbox_configuration() + "<h3>");
+								SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+						}else{
+							bodyText = "<h3 style=\"color:red\">the table configuration is not display right: " +ps.getDropbox_configuration();
+							WriteLogFile.logger.info(" the table configuration is not display right  :"+ ps.getDropbox_configuration() + "<h3>");
+							SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+						}
+					}else{
+						bodyText = "<h3 style=\"color:red\">Can not find the table configuration : " +ps.getDropbox_configuration();
+						WriteLogFile.logger.info("Can not find the table configuration  :"+ ps.getDropbox_configuration() + "<h3>");
+						SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+				} catch (Exception e) {
+					bodyText = "<h3 style=\"color:red\">Can not find the table configuration : " +ps.getDropbox_configuration();
+					WriteLogFile.logger.info("Can not find the table configuration  :"+ ps.getDropbox_configuration() + "<h3>");
+					SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				
+				/******* end checking dropbox configuration *******/
+				
+				
+				
 			}
 			driver.quit();
 			
