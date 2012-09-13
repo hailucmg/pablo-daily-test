@@ -671,13 +671,10 @@ public class PabloDailyTest {
 										List<WebElement> options = dropdowDateMonth.findElements(By.tagName("option"));
 										 int YearCurrent = Calendar.getInstance().get(Calendar.YEAR);
 										 String pastYear = Integer.toString(YearCurrent -1 );
-										 System.out.println(pastYear);
 										 String NextfurtureYear = Integer.toString(YearCurrent+2);
-										 System.out.println(NextfurtureYear);
 										 boolean checkYear = true;
 										 for(WebElement option : options){
 											 String year = option.getText().split("-")[1];
-											 System.out.println(year);
 											 if(year.equalsIgnoreCase(pastYear) || year.equalsIgnoreCase(NextfurtureYear)){
 												 checkYear = false;
 												 break;
