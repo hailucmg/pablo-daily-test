@@ -10,7 +10,8 @@ import com.bp.pablo.element.PabloSite;
 import com.bp.pablo.element.TestAccount;
 
 public class IOUTIL {
-	
+	public static final String ACCOUNT_PROPERTIES = "account.properties";
+	public static final String SITES_PROPERTIES = "site.properties";
 	public static TestAccount loadAccountTest(){
 		 File f = new File("account.properties");
 		 if(f.exists()){

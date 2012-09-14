@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="D:/workspace_local/Pablo_2808/lib/mail-1.4.1.jar"/>
-	<classpathentry kind="lib" path="D:/workspace_Selenium/selenium-server-standalone-2.25.0.jar"/>
-	<classpathentry kind="lib" path="D:/workspace_Selenium/selenium-java-2.25.0/selenium-2.25.0/selenium-java-2.25.0.jar"/>
-	<classpathentry kind="lib" path="D:/workspace_Selenium/selenium-java-2.25.0/selenium-2.25.0/selenium-java-2.25.0-srcs.jar"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resource"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry exported="true" kind="lib" path="lib/mail-1.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/selenium-java-2.25.0-srcs.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/selenium-java-2.25.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/selenium-server-standalone-2.25.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
