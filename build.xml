@@ -51,11 +51,12 @@
             <src path="${src.dir}"/>
             <classpath refid="project.classpath"/>   
         </javac>
+    	<copydir src="${resource.dir}" dest="${classes.dir}"/>
     </target>
 
     <target name="build-jar" depends="build">
         <delete file="${final.jar}" />    	
-    	<copydir src="${resource.dir}" dest="${bin.dir}"/>
+    	
         <one-jar destfile="${final.jar}" onejarmainclass="${main.class}">
             <main>
                 <fileset dir="${classes.dir}"/>
