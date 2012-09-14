@@ -74,7 +74,7 @@
 	</target>
 
 	<target name="create-schedule" depends="build-jar, delete-schedule">
-		<echo file="shell.input">echo Y|schtasks /create /tn ${schedule.name} /tr "java -jar ${env.PABLO_AUTOMATION_TEST_HOME}${jar.name}" ${schedule.opts}
+		<echo file="shell.input">echo Y|schtasks /create /tn ${schedule.name} /tr "java -jar ${env.PABLO_AUTOMATION_TEST_HOME}\${jar.name}" ${schedule.opts}
 		</echo>		
 		<exec executable="cmd" input="shell.input">
 		</exec>
