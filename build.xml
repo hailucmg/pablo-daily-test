@@ -4,7 +4,7 @@
 		e.g  D:\Workplace\workspace\Pablo_daily_test\bin\ -->
 	<property environment="env" />
 	<property name="schedule.name" value="Pablo_AutomationTest" />
-	<property name="schedule.opts" value="/sc DAILY /st 10:00:00" />
+	<property name="schedule.opts" value="/sc DAILY /st 09:00:00" />
 	<property name="jar.name" value="AutomationTest.jar" />
 
 	<property name="debuglevel" value="source,lines,vars" />
