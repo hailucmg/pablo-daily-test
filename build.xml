@@ -6,7 +6,7 @@
 	<property name="schedule.name" value="Pablo_AutomationTest" />
 	<property name="schedule.opts" value="/sc DAILY /st 10:00:00" />
 	<property name="jar.name" value="AutomationTest.jar" />
-	
+
 	<property name="debuglevel" value="source,lines,vars" />
 	<property name="target" value="1.6" />
 	<property name="source" value="1.6" />
@@ -73,27 +73,32 @@
 		</one-jar>
 	</target>
 
-	<target name="create-schedule" depends="build-jar">
+	<target name="create-schedule" depends="build-jar, delete-schedule">
 		<echo file="shell.input">echo Y|schtasks /create /tn ${schedule.name} /tr "java -jar ${env.PABLO_AUTOMATION_TEST_HOME}${jar.name}" ${schedule.opts}
 		</echo>		
 		<exec executable="cmd" input="shell.input">
 		</exec>
-		<delete file="shell.input"></delete>
+		<delete file="shell.input">
+		</delete>
 	</target>
 
 	<target name="run-schedule" depends="create-schedule">
 		<echo file="shell.input">schtasks /run /tn ${schedule.name}
 		</echo>
+		<echo file="shell.input" append="true">Y
+		</echo>
 		<exec executable="cmd" input="shell.input">
 		</exec>
-		<delete file="shell.input"></delete>
+		<delete file="shell.input">
+		</delete>
 	</target>
-	
+
 	<target name="delete-schedule">
-			<echo file="shell.input">echo Y|schtasks /delete /tn ${schedule.name}
-			</echo>
-			<exec executable="cmd" input="shell.input">
-			</exec>
-			<delete file="shell.input"></delete>
+		<echo file="shell.input">echo Y|schtasks /delete /tn ${schedule.name} /f
+		</echo>
+		<exec executable="cmd" input="shell.input">
+		</exec>
+		<delete file="shell.input">
+		</delete>
 	</target>
 </project>
