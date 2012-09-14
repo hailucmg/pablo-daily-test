@@ -1,73 +1,99 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="build-jar" name="AutomationTest">	
-    <property environment="env"/>
-    <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
-
-    <property name="one-jar.dist.dir" value="lib"/>
-    <import file="${one-jar.dist.dir}/one-jar-ant-task.xml" optional="true" />
-
-    <property name="src.dir"          value="src/main/java"/>
-	<property name="resource.dir"     value="src/main/resource"/>
-    <property name="bin.dir"          value="bin"/>
-    <property name="build.dir"        value="build"/>
-    <property name="classes.dir"      value="${build.dir}/classes"/>
-    <property name="jar.target.dir"   value="${build.dir}/jars"/>
-    <property name="external.lib.dir" value="lib"/>
-    <property name="final.jar"        value="${bin.dir}/AutomationTest.jar"/>
-
-    <property name="main.class"       value="com.bp.pablo.exe.AutomationTest"/>
-
-    <path id="project.classpath">
-        <fileset dir="${external.lib.dir}">
-            <include name="*.jar"/>
-        </fileset>
-    </path>
-
-    <target name="init" depends="clean">
-        <mkdir dir="${bin.dir}"/>
-        <mkdir dir="${build.dir}"/>
-        <mkdir dir="${classes.dir}"/>
-        <mkdir dir="${jar.target.dir}"/>
-        <copy includeemptydirs="false" todir="${classes.dir}">
-            <fileset dir="${src.dir}">
-                <exclude name="**/*.launch"/>
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-
-    <target name="clean">
-        <delete dir="${build.dir}"/>
-        <delete dir="${bin.dir}"/>
-    </target>
-
-    <target name="cleanall" depends="clean"/>
-
-    <target name="build" depends="init">
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="${classes.dir}" source="${source}" target="${target}">
-            <src path="${src.dir}"/>
-            <classpath refid="project.classpath"/>   
-        </javac>
-    	<copydir src="${resource.dir}" dest="${classes.dir}"/>
-    </target>
-
-    <target name="build-jar" depends="build">
-        <delete file="${final.jar}" />    	
-    	
-        <one-jar destfile="${final.jar}" onejarmainclass="${main.class}">
-            <main>
-                <fileset dir="${classes.dir}"/>
-            </main>
-            <lib>
-                <fileset dir="${external.lib.dir}" />
-            </lib>
-        </one-jar>
-    </target>
+<project basedir="." default="build-jar" name="AutomationTest">
+	<!-- Make sure you have System Enviroment PABLO_AUTOMATION_TEST_HOME
+		e.g  D:\Workplace\workspace\Pablo_daily_test\bin\ -->
+	<property environment="env" />
+	<property name="schedule.name" value="Pablo_AutomationTest" />
+	<property name="schedule.opts" value="/sc DAILY /st 10:00:00" />
+	<property name="jar.name" value="AutomationTest.jar" />
 	
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+
+	<property name="one-jar.dist.dir" value="lib" />
+	<import file="${one-jar.dist.dir}/one-jar-ant-task.xml" optional="true" />
+
+	<property name="src.dir" value="src/main/java" />
+	<property name="resource.dir" value="src/main/resource" />
+	<property name="bin.dir" value="bin" />
+	<property name="build.dir" value="build" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="jar.target.dir" value="${build.dir}/jars" />
+	<property name="external.lib.dir" value="lib" />
+	<property name="final.jar" value="${bin.dir}/${jar.name}" />
+
+	<property name="main.class" value="com.bp.pablo.exe.AutomationTest" />
+
+	<path id="project.classpath">
+		<fileset dir="${external.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${jar.target.dir}" />
+		<copy includeemptydirs="false" todir="${classes.dir}">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete dir="${bin.dir}" />
+	</target>
+
+	<target name="cleanall" depends="clean" />
+
+	<target name="build" depends="init">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="${classes.dir}" source="${source}" target="${target}">
+			<src path="${src.dir}" />
+			<classpath refid="project.classpath" />
+		</javac>
+		<copydir src="${resource.dir}" dest="${classes.dir}" />
+	</target>
+
+	<target name="build-jar" depends="build">
+		<delete file="${final.jar}" />
+
+		<one-jar destfile="${final.jar}" onejarmainclass="${main.class}">
+			<main>
+				<fileset dir="${classes.dir}" />
+			</main>
+			<lib>
+				<fileset dir="${external.lib.dir}" />
+			</lib>
+		</one-jar>
+	</target>
+
 	<target name="create-schedule" depends="build-jar">
-		
+		<echo file="shell.input">echo Y|schtasks /create /tn ${schedule.name} /tr "java -jar ${env.PABLO_AUTOMATION_TEST_HOME}${jar.name}" ${schedule.opts}
+		</echo>		
+		<exec executable="cmd" input="shell.input">
+		</exec>
+		<delete file="shell.input"></delete>
+	</target>
+
+	<target name="run-schedule" depends="create-schedule">
+		<echo file="shell.input">schtasks /run /tn ${schedule.name}
+		</echo>
+		<exec executable="cmd" input="shell.input">
+		</exec>
+		<delete file="shell.input"></delete>
+	</target>
+	
+	<target name="delete-schedule">
+			<echo file="shell.input">echo Y|schtasks /delete /tn ${schedule.name}
+			</echo>
+			<exec executable="cmd" input="shell.input">
+			</exec>
+			<delete file="shell.input"></delete>
 	</target>
 </project>
