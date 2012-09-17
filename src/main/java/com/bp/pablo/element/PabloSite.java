@@ -12,7 +12,13 @@ public class PabloSite {
 	String datasource_config_url;
 	String mainview_diary_url;
 	String dropbox_url;
-	String diary_configuration;
+	String usermapping_url;
+	public String getUsermapping_url() {
+		return usermapping_url;
+	}
+	public void setUsermapping_url(String usermapping_url) {
+		this.usermapping_url = usermapping_url;
+	}
 	String diary_color_config;
 	String diary_summary;
 	String dropbox_administrator;
@@ -41,12 +47,7 @@ public class PabloSite {
 	public void setDiary_color_config(String diary_color_config) {
 		this.diary_color_config = diary_color_config;
 	}
-	public String getDiary_configuration() {
-		return diary_configuration;
-	}
-	public void setDiary_configuration(String diary_configuration) {
-		this.diary_configuration = diary_configuration;
-	}
+
 	public String getHome_url() {
 		return home_url;
 	}

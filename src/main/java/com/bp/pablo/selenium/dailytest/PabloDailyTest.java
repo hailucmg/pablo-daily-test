@@ -38,29 +38,33 @@ public class PabloDailyTest {
 		String bodyText = "";		
 		if(ps!=null && acc!=null){
 			/*********checking server is still alive **********/
-			boolean continueCheck = false;
-			selenium.open(ps.getMain_url());
-			if(selenium.isTextPresent("Access to Pablo")){
-				 //bodyText ="<h3>Beginning of automation test for Pablo: "+ ps.getMain_url()+" </h3><br>";
-				 WriteLogFile.logger.info("Beginning of automation test for Pablo");
-				 continueCheck = true;
-			}else{
-				bodyText = "<h3 style=\"color:red\">Server was broken. Cannot open website "+ps.getMain_url()+"</h3>";
-				WriteLogFile.logger.info("Server was broken. Can not open website");
-				SendMailSSL.sendMailCMG(bodyText, "Pablo server broken");
-			}
-			/********* end checking server is still alive **********/
+			boolean continueCheck = true;
+//			selenium.open(ps.getMain_url());
+//			selenium.setTimeout("200000");
+//			if(selenium.isTextPresent("Access to Pablo")){
+//				 //bodyText ="<h3>Beginning of automation test for Pablo: "+ ps.getMain_url()+" </h3><br>";
+//				 WriteLogFile.logger.info("Beginning of automation test for Pablo");
+//				 continueCheck = true;
+//			}else{
+//				bodyText = "<h3 style=\"color:red\">Server was broken. Cannot open website "+ps.getMain_url()+"</h3>";
+//				WriteLogFile.logger.info("Server was broken. Can not open website");
+//				SendMailSSL.sendMailCMG(bodyText, "Pablo server broken");
+//			}
+//			/********* end checking server is still alive **********/
 			
 			if(continueCheck){
 				
 				/*********checking login function is still alive **********/
-				
+			
 				selenium.open(ps.getLogin_url());
+				Thread.sleep(1000);
+				selenium.waitForPageToLoad("1000");
+				selenium.setTimeout("20000");
 				selenium.type("_request_username", acc.getUsername_admin());
 				selenium.type("_request_password", acc.getPassword_admin());
 				selenium.click("check_term");
 				selenium.click("doauth");
-				selenium.waitForPageToLoad("3000");
+				Thread.sleep(5000);
 				try {
 					WebElement logout = driver.findElement(By.xpath("//div[@id='footernav']/span[2][@class='fakelink']/a"));
 					String attr = logout.getText();
@@ -101,6 +105,7 @@ public class PabloDailyTest {
 				/********* checking diary main view function is still alive **********/
 				
 				selenium.open(ps.getMainview_diary_url());
+				Thread.sleep(10000);
 				if(selenium.isTextPresent("Diary centre")){
 					 //bodyText ="<h3>Test function main diary </h3><br>";
 					 WriteLogFile.logger.info("Test function main diary");
@@ -203,82 +208,89 @@ public class PabloDailyTest {
 											//bodyText ="<h3>Test function main diary table diary click to random td in table</h3><br>";
 											WriteLogFile.logger.info("Test function main diary table diary click to random td in table");
 											Thread.sleep(1000);
-											selenium.click("xpath=//tr[@id='diary_row_id0' and @class='DiaryTraffic3']/td[2][@class='DiaryCell DiaryRow']");
-											Thread.sleep(1000);
-											WebElement popupClickTd = driver.findElement(By.id("casenoForm"));
-											if(popupClickTd.isDisplayed()){
-												WebElement table = popupClickTd.findElement(By.className("caseno_form_table"));
-												if(table.isDisplayed()){
-													boolean checkTitle = true;
-													if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[1]/td[1]/b").equalsIgnoreCase("Username:")){
-														checkTitle = false;
-													}
-													if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[2]/td[1]/b").equalsIgnoreCase("Business Group:")){
-														checkTitle = false;
-													}
-													if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[3]/td[1]/b").equalsIgnoreCase("Case Number:")){
-														checkTitle = false;
-													}
-													if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[4]/td[1]/b").equalsIgnoreCase("Current Status:")){
-														checkTitle = false;
-													}
-													if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[5]/td[1]/b").equalsIgnoreCase("Date case was created:")){
-														checkTitle = false;
-													}
-													if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[6]/td[1]/b").equalsIgnoreCase("Disclosure:")){
-														checkTitle = false;
-													}
-													if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[7]/td[1]/b").equalsIgnoreCase("Case Notes:")){
-														checkTitle = false;
-													}
-													 if(!checkTitle){
-														bodyText += "<h3 style=\"color:red\">The title of popup is not display right when click to the table case work in " + ps.getMainview_diary_url() +" </h3><br>";
-														WriteLogFile.logger.info("The title of popup is not display right when click to the table case work in " + ps.getMainview_diary_url());
+											try {
+												selenium.click("xpath=//tr[@id='diary_row_id0']/td[2][@class='DiaryCell DiaryRow']");
+												Thread.sleep(1000);
+												WebElement popupClickTd = driver.findElement(By.id("casenoForm"));
+												if(popupClickTd.isDisplayed()){
+													WebElement table = popupClickTd.findElement(By.className("caseno_form_table"));
+													if(table.isDisplayed()){
+														boolean checkTitle = true;
+														if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[1]/td[1]/b").equalsIgnoreCase("Username:")){
+															checkTitle = false;
+														}
+														if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[2]/td[1]/b").equalsIgnoreCase("Business Group:")){
+															checkTitle = false;
+														}
+														if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[3]/td[1]/b").equalsIgnoreCase("Case Number:")){
+															checkTitle = false;
+														}
+														if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[4]/td[1]/b").equalsIgnoreCase("Current Status:")){
+															checkTitle = false;
+														}
+														if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[5]/td[1]/b").equalsIgnoreCase("Date case was created:")){
+															checkTitle = false;
+														}
+														if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[6]/td[1]/b").equalsIgnoreCase("Disclosure:")){
+															checkTitle = false;
+														}
+														if(!selenium.getText("xpath=//div[@id='casenoFormMid']/table[@class='caseno_form_table']/tbody/tr[7]/td[1]/b").equalsIgnoreCase("Case Notes:")){
+															checkTitle = false;
+														}
+														 if(!checkTitle){
+															bodyText += "<h3 style=\"color:red\">The title of popup is not display right when click to the table case work in " + ps.getMainview_diary_url() +" </h3><br>";
+															WriteLogFile.logger.info("The title of popup is not display right when click to the table case work in " + ps.getMainview_diary_url());
+															//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+														 }
+														boolean checkData = true;
+														if(selenium.getText("caseno_username") == null){
+															checkData = false;
+														}
+														if(selenium.getText("caseno_bgroup") == null){
+															checkData = false;
+														}
+														if(selenium.getText("caseno_case_number") == null){
+															checkData = false;
+														}
+														if(selenium.getText("caseno_current_status") == null){
+															checkData = false;
+														}
+														if(selenium.getText("caseno_date_create") == null){
+															checkData = false;
+														}
+														if(selenium.getText("caseno_disclosure") == null){
+															checkData = false;
+														}
+														if(selenium.getText("caseno_case_notes") == null){
+															checkData = false;
+														}
+														if(!checkData){
+															bodyText += "<h3 style=\"color:red\">The data of popup is not display right when click to the table case work in " + ps.getMainview_diary_url() +" </h3><br>";
+															WriteLogFile.logger.info("The data of popup is not display right when click to the table case work in " + ps.getMainview_diary_url());
+															//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+														}
+														
+														if(checkTitle == true && checkData == true){
+															//bodyText ="<h3>Test function main diary table diary click to random td in table passed</h3><br>";
+															WriteLogFile.logger.info("Test function main diary table diary click to random td in table passeds");
+														}
+														
+													}else{
+														bodyText += "<h3 style=\"color:red\">The popup is not display when click to the td of table case work in " + ps.getMainview_diary_url() +" </h3><br>";
+														WriteLogFile.logger.info("The popup is not display when click to the table case work in " + ps.getMainview_diary_url());
 														//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
-													 }
-													boolean checkData = true;
-													if(selenium.getText("caseno_username") == null){
-														checkData = false;
 													}
-													if(selenium.getText("caseno_bgroup") == null){
-														checkData = false;
-													}
-													if(selenium.getText("caseno_case_number") == null){
-														checkData = false;
-													}
-													if(selenium.getText("caseno_current_status") == null){
-														checkData = false;
-													}
-													if(selenium.getText("caseno_date_create") == null){
-														checkData = false;
-													}
-													if(selenium.getText("caseno_disclosure") == null){
-														checkData = false;
-													}
-													if(selenium.getText("caseno_case_notes") == null){
-														checkData = false;
-													}
-													if(!checkData){
-														bodyText += "<h3 style=\"color:red\">The data of popup is not display right when click to the table case work in " + ps.getMainview_diary_url() +" </h3><br>";
-														WriteLogFile.logger.info("The data of popup is not display right when click to the table case work in " + ps.getMainview_diary_url());
-														//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
-													}
-													
-													if(checkTitle == true && checkData == true){
-														//bodyText ="<h3>Test function main diary table diary click to random td in table passed</h3><br>";
-														WriteLogFile.logger.info("Test function main diary table diary click to random td in table passeds");
-													}
-													
 												}else{
-													bodyText += "<h3 style=\"color:red\">The popup is not display when click to the td of table case work in " + ps.getMainview_diary_url() +" </h3><br>";
+													bodyText += "<h3 style=\"color:red\">The popup is not display when click to the table case work in " + ps.getMainview_diary_url() +" </h3><br>";
 													WriteLogFile.logger.info("The popup is not display when click to the table case work in " + ps.getMainview_diary_url());
 													//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 												}
-											}else{
-												bodyText += "<h3 style=\"color:red\">The popup is not display when click to the table case work in " + ps.getMainview_diary_url() +" </h3><br>";
-												WriteLogFile.logger.info("The popup is not display when click to the table case work in " + ps.getMainview_diary_url());
-												//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+											} catch (Exception e) {
+												e.printStackTrace();
+												bodyText += "<h3 style=\"color:red\">Cannot open a first row in table main diary :"+ps.getMainview_diary_url()+"</h3><br>";
+												WriteLogFile.logger.info("Cannot open a first row in table main diary");
 											}
+										
 										}
 									}
 							       
@@ -293,21 +305,21 @@ public class PabloDailyTest {
 				}
 				/*********end checking diary main view function is still alive **********/
 				
-				/******* start checking Diary configuration: *****/
-				selenium.open(ps.getDiary_configuration());
+				/******* start checking Usermapping*****/
+				selenium.open(ps.getUsermapping_url());
 				Thread.sleep(2000);
-				if(selenium.isTextPresent("Diary configuration")){
+				if(selenium.isTextPresent("Administrator Mapping User")){
 					//bodyText ="<h3>Go to diary configuration passeed</h3><br>";
 					WriteLogFile.logger.info("Go to diary configuration passeed");
 				}else{
-					bodyText += "<h3 style=\"color:red\">Cannot open website "+ps.getDiary_configuration()+"</h3><br>";
-					WriteLogFile.logger.info("Server was broken. Can not open website :" +ps.getDiary_configuration());
+					bodyText += "<h3 style=\"color:red\">Cannot open website "+ps.getUsermapping_url()+"</h3><br>";
+					WriteLogFile.logger.info("Server was broken. Can not open website :" +ps.getUsermapping_url());
 					//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 				}
 				/***** start check function of unmapped user ****/
 				try {
 					//bodyText ="<h3>Go to diary configuration check unMapped table</h3><br>";
-					WriteLogFile.logger.info("Go to diary configuration check unMapped table");
+					WriteLogFile.logger.info("Go to Administrator Mapping User check unMapped table");
 					WebElement tableUnmap = driver.findElement(By.id("usermapping"));
 					if(tableUnmap.isDisplayed()){
 						int TableRowCount = selenium.getXpathCount("//table[@id='usermapping']/tbody/tr").intValue();
@@ -318,30 +330,31 @@ public class PabloDailyTest {
 								WebElement popup = driver.findElement(By.id("popupContact"));
 								if(popup.isDisplayed()){
 									//bodyText ="<h3>Go to diary configuration check unMapped table and click to button usermapping passed</h3><br>";
-									WriteLogFile.logger.info("Go to diary configuration check unMapped table and click to button usermapping passed");
+									WriteLogFile.logger.info("Go to usermapping check unMapped table and click to button usermapping passed");
 									selenium.click("popupContactClose");
 									Thread.sleep(1000);
 								}else{
-									bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button usermapping in :"+ps.getDiary_configuration()+"</h3><br>";
-									WriteLogFile.logger.info("Can't load  popup when click to button usermapping in :"+ps.getDiary_configuration());
+									bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button usermapping in :"+ps.getUsermapping_url()+"</h3><br>";
+									WriteLogFile.logger.info("Can't load  popup when click to button usermapping in :"+ps.getUsermapping_url());
 									//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 								}
 							} catch (Exception e) {
-								bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button usermapping in :"+ps.getDiary_configuration()+"</h3><br>";
-								WriteLogFile.logger.info("Can't load  popup when click to button usermapping in :"+ps.getDiary_configuration());
+								bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button usermapping of table Adminnistrator in :"+ps.getUsermapping_url()+"</h3><br>";
+								WriteLogFile.logger.info("Can't load  popup when click to button usermapping in :"+ps.getUsermapping_url());
 								//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 							}
 							
 						}
 					}else{
-						bodyText += "<h3 style=\"color:red\">Can't load  Unmapped User table in :"+ps.getDiary_configuration()+"</h3><br>";
-						WriteLogFile.logger.info("Can't load  Unmapped User table in :"+ps.getDiary_configuration());
+						bodyText += "<h3 style=\"color:red\">Can't load  Unmapped User table in :"+ps.getUsermapping_url()+"</h3><br>";
+						WriteLogFile.logger.info("Can't load  Unmapped User table in :"+ps.getUsermapping_url());
 						//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 					}
 					
 				} catch (Exception e) {
-					bodyText += "<h3 style=\"color:red\">Can't load  Unmapped User table in :"+ps.getDiary_configuration()+"</h3><br>";
-					WriteLogFile.logger.info("Can't load  Unmapped User table in :"+ps.getDiary_configuration());
+					e.printStackTrace();
+					bodyText += "<h3 style=\"color:red\">Can't load  Unmapped User table in :"+ps.getUsermapping_url()+"</h3><br>";
+					WriteLogFile.logger.info("Can't load  Unmapped User table in :"+ps.getUsermapping_url());
 					//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 				}
 				/***** end check function of unmapped user ****/
@@ -350,43 +363,135 @@ public class PabloDailyTest {
 				
 				try {
 					//bodyText ="<h3>Go to diary configuration check Mapped table</h3><br>";
-					WriteLogFile.logger.info("Go to diary configuration check Mapped table");
+					WriteLogFile.logger.info("Go to Administrator Mapping User check Mapped table");
 					WebElement tableMappedUser = driver.findElement(By.id("usermapped"));
+					System.out.println("load table mapped");
 					if(tableMappedUser.isDisplayed()){
 						int TableRowCount = selenium.getXpathCount("//table[@id='usermapped']/tbody/tr").intValue();
 						if(TableRowCount > 1){
-							selenium.click("xpath=//table[@id='usermapped' and @class='tablesorter']/tbody/tr[1]/td[3][@class='blank']/a[ @class='goButton edit']");
+							selenium.click("xpath=//table[@id='usermapped' and @class='tablesorter']/tbody/tr[1]/td[3][@class='blank']/input[ @class='BtnAviaryEdit edit']");
 							Thread.sleep(1000);
 							try {
 								WebElement popup = driver.findElement(By.id("popupContact"));
 								if(popup.isDisplayed()){
+									selenium.click("popupContactClose");
 									//bodyText ="<h3>Go to diary configuration check  Mapped table and  click to button edit  passed</h3><br>";
 									WriteLogFile.logger.info("Go to diary configuration check unMapped table and click to button edit  passed");
 								}else{
-									bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button edit of Mapped table user in :"+ps.getDiary_configuration()+"</h3><br>";
-									WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getDiary_configuration());
+									bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url()+"</h3><br>";
+									WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url());
 									//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 								}
 							} catch (Exception e) {
-								bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button edit of Mapped table user in :"+ps.getDiary_configuration()+"</h3><br>";
-								WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getDiary_configuration());
+								bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url()+"</h3><br>";
+								WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url());
 								//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 							}
 						}
 					}else{
-						bodyText += "<h3 style=\"color:red\">Can't load  mapped User table in :"+ps.getDiary_configuration()+"</h3><br>";
-						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getDiary_configuration());
+						bodyText += "<h3 style=\"color:red\">Can't load  mapped User table in :"+ps.getUsermapping_url()+"</h3><br>";
+						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
 						//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 					}
 				} catch (Exception e) {
-					bodyText += "<h3 style=\"color:red\">Can't load  mapped User table in :"+ps.getDiary_configuration()+"</h3><br>";
-					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getDiary_configuration());
+					e.printStackTrace();
+					bodyText += "<h3 style=\"color:red\">Can't load  mapped User table in :"+ps.getUsermapping_url()+"</h3><br>";
+					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
 					//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 				}
 				
 				/******** end check function of mapped user ********/
 				
-				/******* end checking Diary configuration ********/
+				
+				/****** start check function of aviary mapper user ***/
+				try {
+					//bodyText ="<h3>Go to diary configuration check Mapped table</h3><br>";
+					WriteLogFile.logger.info("Go to Administrator  Mapping User check AViary Mapped table");
+					WebElement tableMappedUser = driver.findElement(By.id("usermappedAviary"));
+					if(tableMappedUser.isDisplayed()){
+						int TableRowCount = selenium.getXpathCount("//table[@id='usermappedAviary']/tbody/tr").intValue();
+						if(TableRowCount > 2){
+							selenium.click("xpath=//table[@id='usermappedAviary' and @class='tablesorter']/tbody/tr[3]/td[3][@class='blank']/input[ @class='BtnAviaryEdit editAviary']");
+							Thread.sleep(1000);
+							try {
+								WebElement popup = driver.findElement(By.id("popupContactAviary"));
+								if(popup.isDisplayed()){
+									selenium.click("popupContactCloseAviary");
+									Thread.sleep(1000);
+									//bodyText ="<h3>Go to diary configuration check  Mapped table and  click to button edit  passed</h3><br>";
+									WriteLogFile.logger.info("Go to diary configuration check unMapped table and click to button edit  passed");
+								}else{
+									bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url()+"</h3><br>";
+									WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url());
+									//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+							} catch (Exception e) {
+								bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button edit of Mapped table aviary user in :"+ps.getUsermapping_url()+"</h3><br>";
+								WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table aviary user in :"+ps.getUsermapping_url());
+								//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+						}
+					}else{
+						bodyText += "<h3 style=\"color:red\">Can't load  mapped aviary User table in :"+ps.getUsermapping_url()+"</h3><br>";
+						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
+						//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					bodyText += "<h3 style=\"color:red\">Can't load  mapped aviary User table in :"+ps.getUsermapping_url()+"</h3><br>";
+					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
+					//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				
+				/****** end check function of aviary mapper user ***/
+				
+				
+				
+				/****** start check function of aviary unmapper user ***/
+				try {
+					//bodyText ="<h3>Go to diary configuration check Mapped table</h3><br>";
+					WriteLogFile.logger.info("Go to Administrator  Mapping User check AViary unMapped table");
+					WebElement tableMappedUser = driver.findElement(By.id("usermappingAviary"));
+					if(tableMappedUser.isDisplayed()){
+						int TableRowCount = selenium.getXpathCount("//table[@id='usermappingAviary']/tbody/tr").intValue();
+						if(TableRowCount > 2){
+							Thread.sleep(1000);
+							selenium.click("xpath=//table[@id='usermappingAviary']/tbody/tr[2]/td[2]/a[@class='buttonMapAviary goButton']");
+							Thread.sleep(1000);
+							try {
+								WebElement popup = driver.findElement(By.id("popupContactAviary"));
+								if(popup.isDisplayed()){
+									selenium.click("popupContactCloseAviary");
+									//bodyText ="<h3>Go to diary configuration check  Mapped table and  click to button edit  passed</h3><br>";
+									WriteLogFile.logger.info("Go to user mapping check unMapped table aviary and click to button edit  passed");
+								}else{
+									bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button mapping user of unMapped table aviary user in :"+ps.getUsermapping_url()+"</h3><br>";
+									WriteLogFile.logger.info("Can't load  popup when click to button mapping user in table unmapped user Aviary in :"+ps.getUsermapping_url());
+									//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+								}
+							} catch (Exception e) {
+								bodyText += "<h3 style=\"color:red\">Can't load  popup when click to button mapping user of unMapped table aviary user in :"+ps.getUsermapping_url()+"</h3><br>";
+								WriteLogFile.logger.info("Can't load  popup when click to button mapping user in table unmapped user Aviary in :"+ps.getUsermapping_url());
+								//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+						}
+					}else{
+						bodyText += "<h3 style=\"color:red\">Can't load  unmapped aviary User table in :"+ps.getUsermapping_url()+"</h3><br>";
+						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
+						//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					bodyText += "<h3 style=\"color:red\">Can't load  unmapped User aviary table in :"+ps.getUsermapping_url()+"</h3><br>";
+					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
+					//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+				}
+				
+				/****** end check function of aviary unmapper user ***/
+				
+				
+				/******* end checking mapping *******/
 				
 				
 				/******* start checking Diary color configuration ****/
@@ -648,7 +753,7 @@ public class PabloDailyTest {
 					
 				/******* start checking payroll page ******/
 				selenium.open(ps.getPayroll_url());
-				Thread.sleep(1000);
+				Thread.sleep(3000);
 				if(selenium.isTextPresent("Payroll dates")){
 					//bodyText = "<h3>Go to Payroll passeed</h3><br>";
 					WriteLogFile.logger.info("Go to Payroll passeed");
@@ -1272,7 +1377,7 @@ public class PabloDailyTest {
 				
 				/******* start checking dropbox configuration *******/
 				selenium.open(ps.getDropbox_configuration());
-				Thread.sleep(1000);
+				Thread.sleep(5000);
 				if(selenium.isTextPresent("Dropbox configuration")){
 					//bodyText = "<h3>Go to dropbox configuration page passed</h3><br>";
 					WriteLogFile.logger.info("<h3>Go to dropbox configuration page passed");
@@ -1288,13 +1393,43 @@ public class PabloDailyTest {
 						int tableRow = selenium.getXpathCount("//div[@id='dropbox_configuration']/div[1][@class='dropbox_configuration_left_content']/table/tbody/tr").intValue();
 						if(tableRow == 5){
 							String defaultValue = selenium.getText("xpath=//span[@id='defaultFileExpiryVal' and @class='view_value']");
-							if(defaultValue.equalsIgnoreCase("90 days")){
+							if(defaultValue.equalsIgnoreCase("30 days")){
 								//bodyText = "<h3>Go to dropbox configuration page the value is 90 passed</h3><br>";
-								WriteLogFile.logger.info("<h3>Go to dropbox configuration the value is 90 page passed");
+								WriteLogFile.logger.info("<h3>Go to dropbox configuration the value is 30, page passed");
 							}else{
-								bodyText += "<h3 style=\"color:red\">the value default is not equal with 90 in table configuration: " +ps.getDropbox_configuration()+"<br>";
-								WriteLogFile.logger.info("the value default is not equal with 90 in table configuration:"+ ps.getDropbox_configuration() + "<h3>");
+								bodyText += "<h3 style=\"color:red\">the value default is not equal with 30 in table configuration: " +ps.getDropbox_configuration()+"<br>";
+								WriteLogFile.logger.info("the value Default file expiry in days("+defaultValue+") is not equal with 30 days in table configuration:"+ ps.getDropbox_configuration() + "<h3>");
 								//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
+							}
+							//check default value for other
+							String defaultNonceLink = selenium.getText("xpath=//span[@id='nonceLinkDurationVal' and @class='view_value']");
+							if(defaultNonceLink.equalsIgnoreCase("5 days")){
+								WriteLogFile.logger.info("<h3>Go to dropbox configuration the value default noncelink duration  is 5, page passed");
+							}else{
+								bodyText += "<h3 style=\"color:red\">the value default nonce link duration("+defaultNonceLink+") is not equal with 5  in table configuration: " +ps.getDropbox_configuration()+"<br>";
+								WriteLogFile.logger.info("the value default nonce link duration("+defaultNonceLink+") is not equal with 5  in table configuration: " +ps.getDropbox_configuration());
+							}
+							String defaultDayOfInnactityvity = selenium.getText("xpath=//span[@id='maximumDayOfInactivityVal' and @class='view_value']");
+							if(defaultDayOfInnactityvity.equalsIgnoreCase("90 days")){
+								WriteLogFile.logger.info("<h3>Go to dropbox configuration the value Days of inactivity before users need to revalidate their accounts is 90, page passed");
+							}else{
+								bodyText += "<h3 style=\"color:red\">the value Days of inactivity before users need to revalidate their accounts("+defaultDayOfInnactityvity+") is not equal with 90  in table configuration: " +ps.getDropbox_configuration()+"<br>";
+								WriteLogFile.logger.info("the value default Days of inactivity before users need to revalidate their accounts("+defaultDayOfInnactityvity+")  is not equal with 90  in table configuration: " +ps.getDropbox_configuration());
+							}
+							String defaulDaypiros = selenium.getText("xpath=//span[@id='revalidDatePromptDayVal' and @class='view_value']");
+							if(defaulDaypiros.equalsIgnoreCase("14, 7 & 1 days")){
+								WriteLogFile.logger.info("Defaul day priors is passed");
+							}else{
+								bodyText += "<h3 style=\"color:red\">the value Days prior to a user's re-validation date to send an email reminder("+defaulDaypiros+") is not equal with 14, 7 & 1 days  in table configuration: " +ps.getDropbox_configuration()+"<br>";
+								WriteLogFile.logger.info("Days prior to a user's re-validation date to send an email reminder("+defaulDaypiros+") is not equal with 14, 7 & 1 days  in table configuration: " +ps.getDropbox_configuration());
+							}
+							
+							String defaulDayDurationDropbox = selenium.getText("dropboxDurationOptionVal");
+							if(defaulDayDurationDropbox.equalsIgnoreCase("1, 7 ,28, 90, 180, *")){
+								WriteLogFile.logger.info("passed default dayduration of dropbox");
+							}else{
+								bodyText += "<h3 style=\"color:red\">the value Default duration of a Dropbox in days("+defaulDayDurationDropbox+") is not equal with 1, 7 ,28, 90, 180, * in table configuration: " +ps.getDropbox_configuration()+"<br>";
+								WriteLogFile.logger.info("Default duration of a Dropbox in days("+defaulDayDurationDropbox+")  is not equal with 1, 7 ,28, 90, 180, * in table configuration: " +ps.getDropbox_configuration());
 							}
 						}else{
 							bodyText += "<h3 style=\"color:red\">the table configuration is not display right: " +ps.getDropbox_configuration()+"<br>";
@@ -1315,8 +1450,6 @@ public class PabloDailyTest {
 				
 				/******* end checking dropbox configuration *******/
 				
-				
-					System.out.println(bodyText);
 					if(bodyText.trim().length() >0){
 						SendMailSSL.sendMailCMG(bodyText, "Pablo Server has Prolem");
 					}else{

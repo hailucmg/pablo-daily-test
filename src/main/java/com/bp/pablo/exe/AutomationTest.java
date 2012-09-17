@@ -11,6 +11,8 @@ import com.bp.pablo.selenium.util.IOUTIL;
 import com.bp.pablo.selenium.util.SendMailSSL;
 import com.thoughtworks.selenium.Selenium;
 
+
+
 public class AutomationTest {
 	public static void main(String[] arg) throws InterruptedException{
 		PabloSite ps = null;
@@ -29,11 +31,11 @@ public class AutomationTest {
 		} catch (Exception e) {
 			SendMailSSL.sendMailCMG("There are missing some jar file : selenium-server-standalone or selenium-java.jar or selenium-java-srcs.jar !", "Pablo server missing some file");
 		}
-		
 		try {
 			PabloDailyTest dailyTest = new PabloDailyTest();
 			dailyTest.runTest(ps, acc, driver, selenium);
 		} catch (Exception e) {
+			SendMailSSL.sendMailCMG("<h3>This server down because :<br></h3>"+e.getMessage(), "Can not connect to server Pablo");
 			e.printStackTrace();
 			driver.quit();
 		}

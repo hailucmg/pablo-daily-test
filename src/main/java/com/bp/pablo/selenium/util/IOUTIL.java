@@ -1,7 +1,6 @@
 package com.bp.pablo.selenium.util;
 
-import java.io.File;
-import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
@@ -9,10 +8,16 @@ import java.util.Properties;
 import com.bp.pablo.element.PabloSite;
 import com.bp.pablo.element.TestAccount;
 
+
 public class IOUTIL {
 	public static final String ACCOUNT_PROPERTIES = "account.properties";
 	public static final String SITES_PROPERTIES = "site.properties";
 
+	/**
+	 * Load account test.
+	 *
+	 * @return the test account
+	 */
 	public static TestAccount loadAccountTest() {
 
 		try {
@@ -39,6 +44,11 @@ public class IOUTIL {
 		}
 	}
 
+	/**
+	 * Load all url.
+	 *
+	 * @return the pablo site
+	 */
 	public static PabloSite loadAllUrl() {
 		try {
 			PabloSite ps = new PabloSite();
@@ -49,7 +59,7 @@ public class IOUTIL {
 			ps.setDropbox_url(pro.getProperty("dropbox_url"));
 			ps.setMainview_diary_url(pro.getProperty("diary_center"));
 			ps.setHome_url(pro.getProperty("home_url"));
-			ps.setDiary_configuration(pro.getProperty("diary_configuration"));
+			ps.setUsermapping_url(pro.getProperty("usermapping"));
 			ps.setDiary_color_config(pro.getProperty("diary_color_config"));
 			ps.setDiary_summary(pro.getProperty("diary_summary"));
 			ps.setTeam_allocation_url(pro.getProperty("team_allocation_url"));
