@@ -53,7 +53,7 @@ public class SendMailSSL {
             try {
 				message.setFrom(new InternetAddress("lan.ta@c-mg.com"));
 				message.setRecipients(Message.RecipientType.TO,
-			    InternetAddress.parse("hai.lu@c-mg.com"));
+			    InternetAddress.parse("lan.ta@c-mg.com"));
 			    message.setSubject(subject);
 			    message.setContent(body, "text/html");
 			    Transport.send(message);
