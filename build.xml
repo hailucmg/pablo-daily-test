@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="run-schedule" name="AutomationTest">
+<project basedir="." default="create-schedule" name="AutomationTest">
 	<!-- Make sure you have System Enviroment PABLO_AUTOMATION_TEST_HOME
 		e.g  D:\Workplace\workspace\Pablo_daily_test\bin\ -->
 	<property environment="env" />
 	<property name="schedule.name" value="Pablo_AutomationTest" />
-	<property name="schedule.opts" value="/sc DAILY /st 09:00:00" />
+	<property name="schedule.opts" value="/sc DAILY /st 08:00:00" />
 	<property name="jar.name" value="AutomationTest.jar" />
 
 	<property name="debuglevel" value="source,lines,vars" />
