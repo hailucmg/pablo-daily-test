@@ -33,11 +33,14 @@ public class AutomationTest {
 		}
 		try {
 			PabloDailyTest dailyTest = new PabloDailyTest();
+			selenium.setTimeout("120000");
 			dailyTest.runTest(ps, acc, driver, selenium);
 		} catch (Exception e) {
-			SendMailSSL.sendMailCMG("<h3>This server down because :<br></h3>"+e.getMessage(), "Can not connect to server Pablo");
+			PabloDailyTest dailyTest = new PabloDailyTest();
+			selenium.setTimeout("120000");
+			dailyTest.runTest(ps, acc, driver, selenium);
 			e.printStackTrace();
-			driver.quit();
+			
 		}
 		
 	}

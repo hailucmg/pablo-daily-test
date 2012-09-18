@@ -58,14 +58,13 @@ public class PabloDailyTest {
 			
 				selenium.open(ps.getLogin_url());
 				Thread.sleep(1000);
-				selenium.waitForPageToLoad("1000");
-				selenium.setTimeout("20000");
 				selenium.type("_request_username", acc.getUsername_admin());
 				selenium.type("_request_password", acc.getPassword_admin());
 				selenium.click("check_term");
 				selenium.click("doauth");
-				Thread.sleep(5000);
+				Thread.sleep(2000);
 				try {
+					selenium.waitForPageToLoad("1000");
 					WebElement logout = driver.findElement(By.xpath("//div[@id='footernav']/span[2][@class='fakelink']/a"));
 					String attr = logout.getText();
 					if(attr.equalsIgnoreCase("logout")){
@@ -75,7 +74,7 @@ public class PabloDailyTest {
 							 
 							 /*********checking homepage function is still alive **********/
 							selenium.open(ps.getHome_url());
-							selenium.waitForPageToLoad("10000");
+							Thread.sleep(2000);
 							WebElement payrollNextFurture = driver.findElement(By.xpath("//div[@id='block-1' and @class='block']/h1[@class='draghandle']"));
 							String payrollTitle = payrollNextFurture.getText();
 							if(!payrollTitle.equals("Next payroll cut-off")){
@@ -94,6 +93,7 @@ public class PabloDailyTest {
 						//SendMailSSL.sendMailCMG("<h2>The Link of logout is not equal with 'logout'</h2><br>Thank you", "Pablo server have problem");
 					}
 				} catch (Exception e) {
+					
 					bodyText+="<h2>Function login have a problem!It may be your accout test is wrong or the login handler have a issue!</h2><br>";
 					//SendMailSSL.sendMailCMG("<h2>Function login have a problem!It may be your accout test is wrong or the login handler have a issue!</h2><br>Please help me to check this", "Pablo server have problem");
 				}
@@ -691,7 +691,7 @@ public class PabloDailyTest {
 				
 				/***** start checking Team management ********/
 					selenium.open(ps.getTeam_allocation_url());
-					Thread.sleep(2000);
+					Thread.sleep(20000);
 					if(selenium.isTextPresent("Team management")){
 					//bodyText = "<h3>Go to Team management passeed</h3><br>";
 						WriteLogFile.logger.info("Go to Team management passeed");
@@ -1155,13 +1155,13 @@ public class PabloDailyTest {
 													if(viewDropUser.isDisplayed()){
 														selenium.type("listMail", "lan.ta@c-mg.com");
 														selenium.click("btnCheckMail");
-														Thread.sleep(5000);
+														Thread.sleep(10000);
 														WebElement tableShow = driver.findElement(By.id("MailUsertbl"));
 														if(tableShow.isDisplayed()){
 															//bodyText = "<h3>Go to dropbox administrator all funciton passed</h3><br>";
 															WriteLogFile.logger.info("Go to dropbox administrator all function is passed");
 														}else{
-															bodyText += "<h3 style=\"color:red\">The table when click btnCheckMail in dropbox administrator is missing<h3><br>";
+															bodyText += "<h3 style=\"color:red\">The table when click btnCheckMail in dropbox administrator is missing :"+ps.getDropbox_administrator()+"<h3><br>";
 															WriteLogFile.logger.info("The table when click btnCheckMail in dropbox administrator is missing");
 															//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 														}
