@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.bp.pablo.element.DatabaseInfor;
 import com.bp.pablo.element.PabloSite;
 import com.bp.pablo.element.TestAccount;
 
@@ -12,7 +13,7 @@ import com.bp.pablo.element.TestAccount;
 public class IOUTIL {
 	public static final String ACCOUNT_PROPERTIES = "account.properties";
 	public static final String SITES_PROPERTIES = "site.properties";
-
+	public static final String AVIARY_PROPERTIES = "aviaryconnection.properties";
 	/**
 	 * Load account test.
 	 *
@@ -66,6 +67,7 @@ public class IOUTIL {
 			ps.setPayroll_url(pro.getProperty("payroll_url"));
 			ps.setBank_holiday_url(pro.getProperty("bank_holiday_url"));
 			ps.setDropbox_url(pro.getProperty("dropbox_url"));
+			ps.setDatasource_config_url(pro.getProperty("datasource_configuration"));
 			ps.setDropbox_administrator(pro
 					.getProperty("dropbox_administrator"));
 			ps.setDropbox_configuration(pro
@@ -79,5 +81,27 @@ public class IOUTIL {
 					"file site.properties is null");
 			return null;
 		}
+	}
+	
+	public static DatabaseInfor loadInfor(String type){
+		DatabaseInfor dbInfor = new DatabaseInfor();
+		Properties pro = new Properties();
+		if(type.equalsIgnoreCase("aviary")){
+			try {
+			pro.load(IOUTIL.class.getResourceAsStream("/" + AVIARY_PROPERTIES));
+			} catch (IOException e) {
+				SendMailSSL.sendMailCMG("<h3>aviaryconnection.properties is null!</h3>","file aviaryconnection.properties is null");
+				return null;
+			}
+		}
+		dbInfor.setSystem(pro.getProperty("system"));
+		dbInfor.setEnvironment(pro.getProperty("environment"));
+		dbInfor.setOperation(pro.getProperty("operation"));
+		dbInfor.setServer(pro.getProperty("server"));
+		dbInfor.setInstance_name(pro.getProperty("instance_name"));
+		dbInfor.setInstance_type(pro.getProperty("instance_type"));
+		dbInfor.setUsername(pro.getProperty("username"));
+		dbInfor.setPassword(pro.getProperty("password"));
+		return null;
 	}
 }
