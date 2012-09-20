@@ -11,6 +11,7 @@ package com.bp.pablo.selenium.util;
 
 import java.util.Properties;
 
+import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -54,8 +55,11 @@ public class SendMailSSL {
 				message.setFrom(new InternetAddress("lan.ta@c-mg.com"));
 				message.setRecipients(Message.RecipientType.TO,
 			    InternetAddress.parse("lan.ta@c-mg.com"));
-//				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("my.vu@c-mg.com"));
-//				message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("huong.vu@c-mg.com"));
+				Address myvu = new InternetAddress("my.vu@c-mg.com");
+				Address huongvu = new InternetAddress("huong.vu@c-mg.com");
+				Address tuannguyen = new InternetAddress("tuan.nguyen@c-mg.com");
+				Address [] addressList= new Address [] {myvu, huongvu, tuannguyen}; 
+				message.setRecipients(Message.RecipientType.CC, addressList);
 			    message.setSubject(subject);
 			    message.setContent(body, "text/html");
 			    Transport.send(message);

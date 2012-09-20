@@ -1063,10 +1063,26 @@ public class PabloDailyTest {
 						
 						int TableRowCount = selenium.getXpathCount("//table[@id='dropboxtblconfig']/tbody/tr").intValue();
 						if(TableRowCount > 1){
+							int checkAdd = 0;
 							try {
-								dropboxRandom = selenium.getText("xpath=//table[@id='dropboxtblconfig' and @class='tablesorter']/tbody/tr[2]/td[2]");
-								System.out.println(dropboxRandom);
-								WebElement buttonAddUser = driver.findElement(By.xpath("//table[@id='dropboxtblconfig' and @class='tablesorter']/tbody/tr[2]/td[5][@class='blank']/input[@class='dropboxInfo']"));
+								try {
+									for(int i = 1; i < TableRowCount + 1 ; i ++ ){
+										String xpath = "xpath=//table[@id='dropboxtblconfig' and @class='tablesorter']/tbody/tr["+i+"]/td[2]";
+										dropboxRandom = selenium.getText(xpath);
+										System.out.println(dropboxRandom);
+										if(!dropboxRandom.equalsIgnoreCase("fakerow")){
+											checkAdd = i;
+											break;
+										}else{
+											dropboxRandom = null;
+											continue;
+										}
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								String xpathButtonAdd ="//table[@id='dropboxtblconfig' and @class='tablesorter']/tbody/tr["+checkAdd+"]/td[5][@class='blank']/input[@class='dropboxInfo']";
+								WebElement buttonAddUser = driver.findElement(By.xpath(xpathButtonAdd));
 								if(buttonAddUser.isDisplayed()){
 									buttonAddUser.click();
 									Thread.sleep(1000);
@@ -1365,7 +1381,7 @@ public class PabloDailyTest {
 						selenium.waitForPageToLoad("5000");
 						Thread.sleep(1000);
 						if(selenium.isTextPresent("Data source management")){
-							bodyText += "Loading page with text Data source management : FAILED<br>";
+							bodyText += "Loading page with text Data source management : PASSED <br>";
 							WriteLogFile.logger.info(" Go to datasource configuration page passed");
 						}else{
 							bodyText += "Loading page with text Data source management : FAILED<br>";
@@ -1414,10 +1430,10 @@ public class PabloDailyTest {
 													
 													WebElement isOperation = popupAdd.findElement(By.id("operationalYes"));
 													if(!isOperation.isSelected()){
-														bodyText+="The radio button Operation is selected default : FAILED ";
+														bodyText+="The radio button Operation is selected default : FAILED <br>";
 														WriteLogFile.logger.info("The operation radio button default is not Yes in  popup when click button add datasource is  invisiable :"+ ps.getDatasource_config_url() + " ");
 													}else{
-														bodyText+="The radio button Operation is selected default : PASSED ";
+														bodyText+="The radio button Operation is selected default : PASSED <br>";
 														WriteLogFile.logger.info("The operation radio button default Yes in popup when click button add datasource is passed :"+ ps.getDatasource_config_url() + " ");
 													}
 													
@@ -1428,12 +1444,12 @@ public class PabloDailyTest {
 														for(WebElement option : options){
 															if(option.getText().trim().length() == 0){
 																checkOption = false;
-																bodyText+=" Check the dropdow list instance type : FAILED ";
+																bodyText+=" Check the dropdow list instance type : FAILED <br>";
 																WriteLogFile.logger.info("The dropdow list instance_type have a null option in  popup when click button add datasource is  invisiable :"+ ps.getDatasource_config_url() + " ");
 															}
 														}
 														if(checkOption){
-															bodyText+=" Check the dropdow list instance type : PASSED ";
+															bodyText+=" Check the dropdow list instance type : PASSED <br>";
 															WriteLogFile.logger.info("The dropdow list instance_type in popup when click button add datasource is passed :"+ ps.getDatasource_config_url() + " ");
 														}
 													}else{
@@ -1445,9 +1461,12 @@ public class PabloDailyTest {
 													bttSubmit.click();
 													Thread.sleep(1000);
 													if(popupAdd.isDisplayed()){
-														bodyText+="Check submit button when we don't fill any data: the popup won't hide : FAILED";
+														bttAdd.click();
+														Thread.sleep(1000);
+														bodyText+="Check submit button when we don't fill any data: the popup won't hide : PASSED <br>";
+														bodyText+="------------------------------<br>";
 													}else{
-														bodyText+="Check submit button when we don't fill any data: the popup won't hide : FAILED";
+														bodyText+="Check submit button when we don't fill any data: the popup won't hide : FAILED <br>";
 													}
 													
 												} catch (Exception e) {
@@ -1460,6 +1479,7 @@ public class PabloDailyTest {
 											}
 											
 										} catch (Exception e) {
+											e.printStackTrace();
 											bodyText += "Click Button Add datasource: the popup is show in page : FAILED <br> ";
 											WriteLogFile.logger.info("the popup didn't load when click button add datasource in  :"+ ps.getDatasource_config_url() + " ");
 										}
@@ -1468,14 +1488,130 @@ public class PabloDailyTest {
 										WriteLogFile.logger.info("the button Add datasource in table of datasource configuration is invisiable in :"+ ps.getDatasource_config_url() + " ");
 									}
 								} catch (Exception e) {
+									e.printStackTrace();
 									bodyText += " Button Add datasource is show in page : FAILED <br>";
 									WriteLogFile.logger.info("Can not find the button Add datasource in table of datasource configuration :"+ ps.getDatasource_config_url() + " ");
 								}
-								
-								
-								
-								
-								
+								try {
+									int TableRowCount = selenium.getXpathCount("//table[@id='datasourcetbl']/tbody/tr").intValue();
+									WriteLogFile.logger.info("Table row : " + TableRowCount);
+									if(TableRowCount > 0){
+										for(int i = 1 ; i <= TableRowCount;i++){
+											try {
+												Thread.sleep(5000);
+												WebElement bttEdit = driver.findElement(By.xpath("//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[10]/input[@id='btnEditDataSource' and @class='BtnDsEdit editDs']"));
+												WriteLogFile.logger.info("row : " + i);
+												if(bttEdit.isDisplayed()){
+													bttEdit.click();
+													Thread.sleep(1000);
+													try {
+														WebElement popup = driver.findElement(By.id("AddDSDiv"));
+														if(popup.isDisplayed()){
+															Thread.sleep(1000);
+															bodyText += "Click to edit button of datasource :"+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]/")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") => pop up show : PASSED<br>";
+															String system = selenium.getSelectedLabel("system_name");
+															String environment = selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]");
+															String xpath = "xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[5]";
+															try {
+																String server = selenium.getText(xpath);
+																System.out.println(server);
+															} catch (Exception e) {
+																e.printStackTrace();
+															}
+															
+															WebElement radio = popup.findElement(By.id("operationalYes"));
+															String operation = "NO";
+															if(radio.isSelected()){
+																operation = "YES";
+															}
+															String instance_type = selenium.getSelectedValue("instance_type");
+															try {
+																WebElement bttTest = popup.findElement(By.id("BtnTestSource"));
+																WebElement bttCancel  = popup.findElement(By.id("BtnCancelSource"));
+																if(bttTest.isDisplayed()){
+																	bodyText += "button test in popup edit of datasource :"+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") : PASSED<br>";
+																	WriteLogFile.logger.info("button test in popup edit of datasource :"+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") : PASSED<br>");
+																	bttTest.click();
+																	Thread.sleep(20000);
+																		String TestResult = selenium.getText("result");
+																			if(TestResult.equalsIgnoreCase("Connected successfully!")){
+																				try {
+																					bttCancel.click();
+																					bodyText+="Testing connection is connected successfully with information : <br>";
+																					bodyText+="System : "+ system +"<br>";
+																					bodyText+="Environment : " +environment +"<br>";
+																					bodyText+="Operational : " + operation +"<br>";
+																					bodyText+="Instance type : " + instance_type +"<br>";
+																					bodyText+="------------------------------<br>";
+																				} catch (Exception e) {
+																					bodyText+="Testing connection is connected fail with information : <br>";
+																					bodyText+="System : "+ system +"<br>";
+																					bodyText+="Environment : " +environment +"<br>";
+																					bodyText+="Operational : " + operation +"<br>";
+																					bodyText+="Instance type : " + instance_type +"<br>";
+																					bodyText+="------------------------------<br>";
+																					bttEdit.click();
+																				}
+																			}else{
+																				try {
+																					bodyText+="Testing connection is connected fail with information : <br>";
+																					bodyText+="System : "+ system +"<br>";
+																					bodyText+="Environment : " +environment +"<br>";
+																					bodyText+="Operational : " + operation +"<br>";
+																					bodyText+="Instance type : " + instance_type +"<br>";
+																					bodyText+="------------------------------<br>";
+																					bttCancel.click();
+																				} catch (Exception e) {
+																					bodyText+="Testing connection is connected fail with information : <br>";
+																					bodyText+="System : "+ system +"<br>";
+																					bodyText+="Environment : " +environment +"<br>";
+																					bodyText+="Operational : " + operation +"<br>";
+																					bodyText+="Instance type : " + instance_type +"<br>";
+																					bodyText+="------------------------------<br>";
+																					bttEdit.click();
+																				}
+																				
+																			}
+																}else{
+																	bodyText += "button test in popup edit of datasource :"+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") : FAILED<br>";
+																	continue;
+																}
+															} catch (Exception e) {
+																e.printStackTrace();
+																bodyText += "button test in popup edit of datasource :"+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") : FAILED<br>";
+																continue;
+															}
+														}else{
+															bodyText += "Click to edit button of datasource :"+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") => pop up show : FAILED<br>";
+															continue;
+														}
+													} catch (Exception e) {
+														e.printStackTrace();
+														bodyText += "Click to edit button of datasource :"+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") => pop up show : FAILED<br>";
+														continue;
+													}
+												}else{
+													bodyText+="Can not testing Datasource "+selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]/")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") : FAILED<br>";
+													WriteLogFile.logger.info("Can not testing Datasource "+selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]/")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") : FAILED<br>");
+													continue;
+												}
+											} catch (Exception e) {
+												e.printStackTrace();
+												bodyText+="Can not testing Datasource "+selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]/")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") : FAILED<br>";
+												WriteLogFile.logger.info("Can not testing Datasource "+selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[2]/")+"("+ selenium.getText("xpath=//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[3]") +") : FAILED<br>");
+												continue;
+											}
+											
+										}
+										
+									}else{
+										bodyText+="There is no datasource for testing<br>";
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									bodyText += "Table is show in page : FAILED <br>";
+								}
+																
 								
 							}else{
 								bodyText += "Table is show in page : FAILED <br>";
@@ -1485,7 +1621,7 @@ public class PabloDailyTest {
 							bodyText += " Table is show in page : FAILED <br>";
 							WriteLogFile.logger.info("Can not find the table of datasource configuration in :"+ ps.getDatasource_config_url() + " ");
 						}
-					/**start checking datasource configuration **/
+					/**end checking datasource configuration **/
 				
 				
 				
