@@ -1,16 +1,20 @@
 package com.bp.pablo.selenium.util;
 
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
-import com.bp.pablo.element.DatabaseInfor;
 import com.bp.pablo.element.PabloSite;
 import com.bp.pablo.element.TestAccount;
 
 
 public class IOUTIL {
+	public static final String BASE_PATH = "C:\\AutomationTest\\Pablo";
 	public static final String ACCOUNT_PROPERTIES = "account.properties";
 	public static final String SITES_PROPERTIES = "site.properties";
 	public static final String AVIARY_PROPERTIES = "aviaryconnection.properties";
@@ -22,9 +26,27 @@ public class IOUTIL {
 	public static TestAccount loadAccountTest() {
 
 		try {
+			File cfgFolder = new File(BASE_PATH + "\\cfg");
+			if (!cfgFolder.exists() || !cfgFolder.isDirectory()) {
+				cfgFolder.mkdirs();
+			}
+			File cfgFile = new File(BASE_PATH + "\\cfg\\" + ACCOUNT_PROPERTIES);
+			
+			if (!cfgFile.exists() || !cfgFile.isFile()) {
+				InputStream is =  IOUTIL.class.getResourceAsStream("/" + ACCOUNT_PROPERTIES);
+				FileOutputStream fos = new FileOutputStream(cfgFile);
+				int n = 0;
+				byte[] b = new byte[1024];
+				while ((n=is.read(b)) != -1) {
+					fos.write(b, 0, n);
+				}
+				fos.flush();
+				fos.close();
+			}
+			cfgFile = new File(BASE_PATH + "\\cfg\\" + ACCOUNT_PROPERTIES);
 			TestAccount acc = new TestAccount();
 			Properties pro = new Properties();
-			pro.load(IOUTIL.class.getResourceAsStream("/" + ACCOUNT_PROPERTIES));
+			pro.load(new FileInputStream(cfgFile));
 			String username_admin = pro.getProperty("username_admin");
 			String password_admin = pro.getProperty("password_admin");
 			String username_normal = pro.getProperty("username_normal");
@@ -34,13 +56,8 @@ public class IOUTIL {
 			acc.setUsername_normal(username_normal);
 			acc.setPassword_normal(password_normal);
 			return acc;
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-			return null;
-		} catch (IOException e2) {
-			e2.printStackTrace();
-			SendMailSSL.sendMailCMG("<h3>account.properties is null!</h3>",
-					"File account.properties is null");
+		} catch (Exception ex) {
+			WriteLogFile.logger.info(ex.getMessage());
 			return null;
 		}
 	}
@@ -52,9 +69,27 @@ public class IOUTIL {
 	 */
 	public static PabloSite loadAllUrl() {
 		try {
+			File cfgFolder = new File(BASE_PATH + "\\cfg");
+			if (!cfgFolder.exists() || !cfgFolder.isDirectory()) {
+				cfgFolder.mkdirs();
+			}
+			File cfgFile = new File(BASE_PATH + "\\cfg\\" + SITES_PROPERTIES);
+			if (!cfgFile.exists() || !cfgFile.isFile()) {
+				InputStream is =  IOUTIL.class.getResourceAsStream("/" + SITES_PROPERTIES);
+				FileOutputStream fos = new FileOutputStream(cfgFile);
+				int n = 0;
+				byte[] b = new byte[1024];
+				while ((n=is.read(b)) != -1) {
+					fos.write(b, 0, n);
+				}
+				fos.flush();
+				fos.close();
+				is.close();
+			}
+			cfgFile = new File(BASE_PATH + "\\cfg\\" + SITES_PROPERTIES);
 			PabloSite ps = new PabloSite();
 			Properties pro = new Properties();			
-			pro.load(IOUTIL.class.getResourceAsStream("/" + SITES_PROPERTIES));
+			pro.load(new FileInputStream(cfgFile));
 			ps.setMain_url(pro.getProperty("main_url"));
 			ps.setLogin_url(pro.getProperty("login_url"));
 			ps.setDropbox_url(pro.getProperty("dropbox_url"));
@@ -73,16 +108,12 @@ public class IOUTIL {
 			ps.setDropbox_configuration(pro
 					.getProperty("dropbox_configuration"));
 			return ps;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			SendMailSSL.sendMailCMG("<h3>pablo_site.properties is null!</h3>",
-					"file site.properties is null");
+		} catch (Exception ex) {
+			WriteLogFile.logger.info(ex.getMessage());
 			return null;
 		}
 	}
-	
+	/*
 	public static DatabaseInfor loadInfor(String type){
 		DatabaseInfor dbInfor = new DatabaseInfor();
 		Properties pro = new Properties();
@@ -104,4 +135,5 @@ public class IOUTIL {
 		dbInfor.setPassword(pro.getProperty("password"));
 		return null;
 	}
+	*/
 }
