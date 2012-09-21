@@ -90,6 +90,7 @@ public class IOUTIL {
 			PabloSite ps = new PabloSite();
 			Properties pro = new Properties();			
 			pro.load(new FileInputStream(cfgFile));
+			ps.setSystem_test(pro.getProperty("System_test"));
 			ps.setMain_url(pro.getProperty("main_url"));
 			ps.setLogin_url(pro.getProperty("login_url"));
 			ps.setDropbox_url(pro.getProperty("dropbox_url"));

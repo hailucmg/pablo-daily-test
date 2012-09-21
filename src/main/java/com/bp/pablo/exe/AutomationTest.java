@@ -23,13 +23,13 @@ public class AutomationTest {
 			ps = IOUTIL.loadAllUrl();
 			acc = IOUTIL.loadAccountTest();
 		} catch (Exception e) {
-			SendMailSSL.sendMailCMG("Please help me to check 2 file account.properties and site.properties!", "Pablo server missing some file");
+			SendMailSSL.sendMailCMG("Please help me to check 2 file account.properties and site.properties!", "Pablo automation test missing some file");
 		}
 		try {
 			driver	 = new FirefoxDriver();
 			selenium = new WebDriverBackedSelenium(driver, ps.getMain_url());
 		} catch (Exception e) {
-			SendMailSSL.sendMailCMG("There are missing some jar file : selenium-server-standalone or selenium-java.jar or selenium-java-srcs.jar !", "Pablo server missing some file");
+			SendMailSSL.sendMailCMG("There are missing some jar file : selenium-server-standalone or selenium-java.jar or selenium-java-srcs.jar !", "Pablo automation test server missing some file");
 		}
 		try {
 			PabloDailyTest dailyTest = new PabloDailyTest();

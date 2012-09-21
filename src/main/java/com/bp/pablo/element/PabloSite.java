@@ -1,7 +1,10 @@
 package com.bp.pablo.element;
 
+/**
+ * The Class PabloSite.
+ */
 public class PabloSite {
-	
+	String system_test;
 	String main_url;
 	String home_url;
 	String login_url;
@@ -13,6 +16,12 @@ public class PabloSite {
 	String mainview_diary_url;
 	String dropbox_url;
 	String usermapping_url;
+	public String getSystem_test() {
+		return system_test;
+	}
+	public void setSystem_test(String system_test) {
+		this.system_test = system_test;
+	}
 	public String getUsermapping_url() {
 		return usermapping_url;
 	}

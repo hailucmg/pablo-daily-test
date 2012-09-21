@@ -1627,11 +1627,7 @@ public class PabloDailyTest {
 				
 				
 					/******* end checking module session & password *****/
-				
-					SendMailSSL.sendMailCMG(bodyText, "Pablo automation result");
-					
-					
-				
+					SendMailSSL.sendMailCMG(bodyText, ps.getSystem_test() +"("+ ps.getMain_url()+")" + " automation test result ");
 			}
 			
 			driver.quit();
