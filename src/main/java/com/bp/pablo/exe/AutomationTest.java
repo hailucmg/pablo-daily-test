@@ -34,10 +34,12 @@ public class AutomationTest {
 		try {
 			PabloDailyTest dailyTest = new PabloDailyTest();
 			selenium.setTimeout("120000");
+			driver.manage().window().maximize();
 			dailyTest.runTest(ps, acc, driver, selenium);
 		} catch (Exception e) {
 			PabloDailyTest dailyTest = new PabloDailyTest();
 			selenium.setTimeout("120000");
+			driver.manage().window().maximize();
 			dailyTest.runTest(ps, acc, driver, selenium);
 			e.printStackTrace();
 			

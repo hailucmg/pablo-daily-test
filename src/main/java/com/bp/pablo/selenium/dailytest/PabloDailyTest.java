@@ -310,7 +310,22 @@ public class PabloDailyTest {
 					if(tableUnmap.isDisplayed()){
 						int TableRowCount = selenium.getXpathCount("//table[@id='usermapping']/tbody/tr").intValue();
 						if(TableRowCount > 1){
-							selenium.click("xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr[1]/td[2]/a[@class='buttonMap goButton']");
+							int locationRow = 1;
+							for(int i = 1 ; i < TableRowCount+1;i++){
+								try {
+									String xpathTemp = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+i+"]/td[1]";
+									String temp = selenium.getText(xpathTemp);
+									if(!temp.equalsIgnoreCase("fakerow")){
+										locationRow = i;
+										break;
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									continue;
+								}
+							}
+							String xpath ="//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[2]/a[@class='buttonMap goButton']";
+							selenium.click(xpath);
 							Thread.sleep(2000);
 							try {
 								WebElement popup = driver.findElement(By.id("popupContact"));
@@ -349,7 +364,22 @@ public class PabloDailyTest {
 					if(tableMappedUser.isDisplayed()){
 						int TableRowCount = selenium.getXpathCount("//table[@id='usermapped']/tbody/tr").intValue();
 						if(TableRowCount > 1){
-							selenium.click("xpath=//table[@id='usermapped' and @class='tablesorter']/tbody/tr[1]/td[3][@class='blank']/input[ @class='BtnAviaryEdit edit']");
+							int locationRow = 1;
+							for(int i = 1 ; i < TableRowCount+1;i++){
+								try {
+									String xpathTemp = "//table[@id='usermapped']/tbody/tr["+i+"]/td[1]";
+									String temp =selenium.getText(xpathTemp);
+									if(!temp.equalsIgnoreCase("fakerow")){
+										locationRow = i;
+										break;
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									continue;
+								}
+							}
+							String xpath = "//table[@id='usermapped' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[3][@class='blank']/input[ @class='BtnAviaryEdit edit']";
+							selenium.click(xpath);
 							Thread.sleep(2000);
 							try {
 								WebElement popup = driver.findElement(By.id("popupContact"));
@@ -385,8 +415,23 @@ public class PabloDailyTest {
 					WebElement tableMappedUser = driver.findElement(By.id("usermappedAviary"));
 					if(tableMappedUser.isDisplayed()){
 						int TableRowCount = selenium.getXpathCount("//table[@id='usermappedAviary']/tbody/tr").intValue();
-						if(TableRowCount > 2){
-							selenium.click("xpath=//table[@id='usermappedAviary' and @class='tablesorter']/tbody/tr[3]/td[3][@class='blank']/input[ @class='BtnAviaryEdit editAviary']");
+						if(TableRowCount > 1){
+							int locationRow = 1;
+							for(int i = 1; i< TableRowCount+1;i++){
+								try {
+									String xpathTemp ="//table[@id='usermappedAviary']/tbody/tr["+i+"]/td[1]";
+									String temp = selenium.getText(xpathTemp);
+									if(temp.equalsIgnoreCase("fakerow")){
+										locationRow = i;
+										break;
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									continue;
+								}
+							}
+							String xpath="//table[@id='usermappedAviary' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[3][@class='blank']/input[ @class='BtnAviaryEdit editAviary']";
+							selenium.click(xpath);
 							Thread.sleep(2000);
 							try {
 								WebElement popup = driver.findElement(By.id("popupContactAviary"));
@@ -425,9 +470,24 @@ public class PabloDailyTest {
 					WebElement tableMappedUser = driver.findElement(By.id("usermappingAviary"));
 					if(tableMappedUser.isDisplayed()){
 						int TableRowCount = selenium.getXpathCount("//table[@id='usermappingAviary']/tbody/tr").intValue();
-						if(TableRowCount > 2){
+						if(TableRowCount > 1){
+							int locationRow = 1; 
+							for(int i = 1 ; i < locationRow+1;i++){
+								try {
+									String xpathTemp = "//table[@id='usermappingAviary']/tbody/tr["+i+"]/td[1]";
+									String temp = selenium.getText(xpathTemp);
+									if(!temp.equalsIgnoreCase("fakerow")){
+										locationRow = i ; 
+										break;
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									continue;
+								}
+							}		 
 							Thread.sleep(1000);
-							selenium.click("xpath=//table[@id='usermappingAviary']/tbody/tr[2]/td[2]/a[@class='buttonMapAviary goButton']");
+							String xpath="//table[@id='usermappingAviary']/tbody/tr["+locationRow+"]/td[2]/a[@class='buttonMapAviary goButton']";
+							selenium.click(xpath);
 							Thread.sleep(2000);
 							try {
 								WebElement popup = driver.findElement(By.id("popupContactAviary"));
@@ -443,7 +503,6 @@ public class PabloDailyTest {
 							} catch (Exception e) {
 								bodyText += " Go to usermapping page check unMapped table Aviary and click to button edit : FAILED<br>";
 								WriteLogFile.logger.info("Can't load  popup when click to button mapping user in table unmapped user Aviary in :"+ps.getUsermapping_url());
-								//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 							}
 						}
 					}else{
@@ -1608,7 +1667,7 @@ public class PabloDailyTest {
 										bodyText+="There is no datasource for testing<br>";
 									}
 								} catch (Exception e) {
-									e.printStackTrace();
+									WriteLogFile.logger.info("error " + e.getMessage());
 									bodyText += "Table is show in page : FAILED <br>";
 								}
 																
