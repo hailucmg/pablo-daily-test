@@ -3,12 +3,13 @@ package com.bp.pablo.selenium.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
+import com.bp.pablo.element.MailNotification;
 import com.bp.pablo.element.PabloSite;
 import com.bp.pablo.element.TestAccount;
 
@@ -17,7 +18,7 @@ public class IOUTIL {
 	public static final String BASE_PATH = "C:\\AutomationTest\\Pablo";
 	public static final String ACCOUNT_PROPERTIES = "account.properties";
 	public static final String SITES_PROPERTIES = "site.properties";
-	public static final String AVIARY_PROPERTIES = "aviaryconnection.properties";
+	public static final String MAILNOTIFICATION = "mail.properties";
 	/**
 	 * Load account test.
 	 *
@@ -114,6 +115,53 @@ public class IOUTIL {
 			return null;
 		}
 	}
+	
+	
+	public static MailNotification loadAllAddressMail(){
+		try {
+			File cfgFolder = new File(BASE_PATH + "\\cfg");
+			if (!cfgFolder.exists() || !cfgFolder.isDirectory()) {
+				cfgFolder.mkdirs();
+			}
+			File cfgFile = new File(BASE_PATH + "\\cfg\\" + MAILNOTIFICATION);
+			if (!cfgFile.exists() || !cfgFile.isFile()) {
+				InputStream is =  IOUTIL.class.getResourceAsStream("/" + MAILNOTIFICATION);
+				FileOutputStream fos = new FileOutputStream(cfgFile);
+				int n = 0;
+				byte[] b = new byte[1024];
+				while ((n=is.read(b)) != -1) {
+					fos.write(b, 0, n);
+				}
+				fos.flush();
+				fos.close();
+				is.close();
+			}
+			cfgFile = new File(BASE_PATH + "\\cfg\\" + MAILNOTIFICATION);
+			Properties pro = new Properties();			
+			pro.load(new FileInputStream(cfgFile));
+			MailNotification mailNotifi = new MailNotification();
+			String notifiAddress = pro.getProperty("send_to");
+			List<String> sendTo = null;
+			if(notifiAddress!=null && notifiAddress.length() > 0){
+				String[] adds = notifiAddress.split(",");
+				if(adds.length > 0 && adds!=null){
+					sendTo = new ArrayList<String>();
+					for(String add :  adds){
+						if(add.length()> 0 && add.contains("@c-mg.com")){
+							sendTo.add(add);
+						}
+					}
+				}
+			}
+			mailNotifi.setSendto(sendTo);
+			return mailNotifi;
+		} catch (Exception e) {
+			WriteLogFile.logger.info(e.getMessage());
+			return null;
+		}
+	}
+	
+	
 	/*
 	public static DatabaseInfor loadInfor(String type){
 		DatabaseInfor dbInfor = new DatabaseInfor();

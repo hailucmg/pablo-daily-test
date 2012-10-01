@@ -9,6 +9,8 @@
 package com.bp.pablo.selenium.util;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Address;
@@ -19,6 +21,9 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+
+import com.bp.pablo.element.MailNotification;
 
 
 /**
@@ -33,7 +38,6 @@ public class SendMailSSL {
      * @throws
      * @throws AddressException
      */
-	
     public static void sendMailCMG(String body, String subject)
        {
         Properties props = new Properties();
@@ -52,14 +56,17 @@ public class SendMailSSL {
                 });
             MimeMessage message = new MimeMessage(session);
             try {
+            	MailNotification AddressMail = IOUTIL.loadAllAddressMail();
+            	List<String> adds = AddressMail.getSendto();
+            	List<Address> listAddress = new ArrayList<Address>();
+            	for(String add : adds){
+            		Address temp = new InternetAddress(add);
+            		listAddress.add(temp);
+            	}
+            	Address[] list = new Address[listAddress.size()];
+            	listAddress.toArray(list);
 				message.setFrom(new InternetAddress("lan.ta@c-mg.com"));
-				message.setRecipients(Message.RecipientType.TO,
-			    InternetAddress.parse("lan.ta@c-mg.com"));
-				Address myvu = new InternetAddress("my.vu@c-mg.com");
-				Address huongvu = new InternetAddress("huong.vu@c-mg.com");
-				Address tuannguyen = new InternetAddress("tuan.nguyen@c-mg.com");
-				Address [] addressList= new Address [] {myvu, huongvu, tuannguyen}; 
-				message.setRecipients(Message.RecipientType.CC, addressList);
+				message.setRecipients(Message.RecipientType.TO,list);
 			    message.setSubject(subject);
 			    message.setContent(body, "text/html");
 			    Transport.send(message);
