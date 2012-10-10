@@ -1045,7 +1045,7 @@ public class PabloDailyTest {
 					bodyText += " Go to dropbox administrator : FAILED  <br>";
 					WriteLogFile.logger.info("Cannot open website :"+ ps.getDropbox_administrator() + " ");
 				}
-				try {
+				try {												  
 					WebElement tableAdmin = driver.findElement(By.id("dropboxtblconfig"));
 					if(tableAdmin.isDisplayed()){
 						bodyText+="  Loading page with table : PASSED<br>";
@@ -1438,7 +1438,7 @@ public class PabloDailyTest {
 						bodyText +="<br><h3>Go to datasource configuration</h3><br>";
 						selenium.open(ps.getDatasource_config_url());
 						selenium.waitForPageToLoad("5000");
-						Thread.sleep(1000);
+						Thread.sleep(1000);			
 						if(selenium.isTextPresent("Data source management")){
 							bodyText += "Loading page with text Data source management : PASSED <br>";
 							WriteLogFile.logger.info(" Go to datasource configuration page passed");
