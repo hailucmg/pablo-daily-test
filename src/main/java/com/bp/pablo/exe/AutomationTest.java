@@ -1,6 +1,8 @@
 package com.bp.pablo.exe;
 
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URL;
 
 
 import org.openqa.selenium.WebDriver;
@@ -24,7 +26,16 @@ public class AutomationTest {
 		TestAccount acc = null;
 		WebDriver driver = null;
 		Selenium selenium = null;
-		boolean reachable = false;
+		boolean reachable = true;
+		try {
+			URL url = new URL("http://www.google.com");
+			HttpURLConnection urlConnect = (HttpURLConnection)url.openConnection();
+			urlConnect.setConnectTimeout(1000);
+			Object objData = urlConnect.getContent();
+		} catch (Exception e) {
+			reachable = false;
+			e.printStackTrace();
+		}
 		try {
 			ps = IOUTIL.loadAllUrl();
 			acc = IOUTIL.loadAccountTest();
@@ -38,14 +49,8 @@ public class AutomationTest {
 			e.printStackTrace();
 			SendMailSSL.sendMailCMG("There are missing some jar file : selenium-server-standalone or selenium-java.jar or selenium-java-srcs.jar !", "Pablo automation test server missing some file");
 		}
-			try {
-				InetAddress address = InetAddress.getByName("google.com.vn");
-				reachable = address.isReachable(10000);
-			} catch (Exception e) {
-				reachable = false;
-				e.printStackTrace();
-			}
-			try {
+		try {
+			System.out.println(reachable);
 			if(reachable){
 				WriteLogFile.logger.info("Connection to internet successfully");
 				PabloDailyTest dailyTest = new PabloDailyTest();
