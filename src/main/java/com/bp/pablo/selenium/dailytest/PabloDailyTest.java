@@ -98,7 +98,7 @@ public class PabloDailyTest {
 				
 				
 				/********* checking diary main view function is still alive **********/
-				 bodyText+=" <br><h3>Go to Diary center main view</h3><br>";
+				bodyText+=" <br><h3>Go to Diary center main view</h3><br>";
 				selenium.open(ps.getMainview_diary_url());
 				Thread.sleep(10000);
 				if(selenium.isTextPresent("Diary centre")){
@@ -113,9 +113,9 @@ public class PabloDailyTest {
 						List<WebElement> options = dropdowList.findElements(By.tagName("option"));
 						if(options!=null){
 							for(WebElement option : options){
-								/*if(!option.getAttribute("value").equalsIgnoreCase("department")){*/
+								if(!option.getAttribute("value").equalsIgnoreCase("department")){
 									ListvalueOfdropdowList.add(option.getText());
-								/*}*/
+								}
 							}
 							bodyText += "Test function dropdow list at top : PASSED<br>";
 							WriteLogFile.logger.info("Test function main diary dropdow list at top passed");
@@ -141,6 +141,7 @@ public class PabloDailyTest {
 						//bodyText =" Test function main diary table diary </h3><br>";
 						WriteLogFile.logger.info("Test function main diary table diary");
 						boolean displayTable = false;
+						System.out.println(ListvalueOfdropdowList.size());
 						for(int i = 0; i < ListvalueOfdropdowList.size() ; i ++ ){
 							if(displayTable){
 								break;
@@ -148,12 +149,13 @@ public class PabloDailyTest {
 							WebElement dropdowList = driver.findElement(By.id("departmentList"));
 							List<WebElement> options = dropdowList.findElements(By.tagName("option"));
 							for(WebElement option : options){
+								System.out.println(option);
 							    if(option.getText().equalsIgnoreCase(ListvalueOfdropdowList.get(i))){
 							        option.click();
 							        Thread.sleep(40000);
-							        WebElement tableCase;
+							        WebElement tableCase = null;
 							        try {
-							        	tableCase = caseWork.findElement(By.id("diary_table"));	
+							        	tableCase = driver.findElement(By.id("diary_table"));
 									} catch (Exception e) {
 										String note = caseWork.getText();
 										if(note.contains("There was a communication error:")){
@@ -279,7 +281,6 @@ public class PabloDailyTest {
 										
 										}
 									}
-							       
 							    }
 							}
 						}
@@ -313,9 +314,9 @@ public class PabloDailyTest {
 							int locationRow = 1;
 							for(int i = 1 ; i < TableRowCount+1;i++){
 								try {
-									String xpathTemp = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+i+"]/td[1]";
+									String xpathTemp = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+i+"]/td[2]";
 									String temp = selenium.getText(xpathTemp);
-									if(!temp.equalsIgnoreCase("fakerow")){
+									if(temp.equalsIgnoreCase("")){
 										locationRow = i;
 										break;
 									}
@@ -324,33 +325,35 @@ public class PabloDailyTest {
 									continue;
 								}
 							}
-							String xpath ="//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[2]/a[@class='buttonMap goButton']";
+							String xpath ="//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[3]/input[@class='BtnDropboxLink buttonMap']";
+							System.out.println(xpath);
 							selenium.click(xpath);
 							Thread.sleep(2000);
 							try {
+								
 								WebElement popup = driver.findElement(By.id("popupContact"));
 								if(popup.isDisplayed()){
-									bodyText +="Go to usermapping page check unMapped table Administrator and click to button usermapping : PASSED <br>";
-									WriteLogFile.logger.info("Go to usermapping check unMapped table and click to button usermapping passed");
+									bodyText +="Go to usermapping page check  table Administrator and click to button usermapping : PASSED <br>";
+									WriteLogFile.logger.info("Go to usermapping check  table and click to button usermapping passed");
 									selenium.click("popupContactClose");
 									Thread.sleep(1000);
 								}else{
-									bodyText += "Go to usermapping page check unMapped table Administrator and click to button usermapping : FAILED <br>";
+									bodyText += "Go to usermapping page check  table Administrator and click to button usermapping : FAILED <br>";
 									WriteLogFile.logger.info("Can't load  popup when click to button usermapping in :"+ps.getUsermapping_url());
 								}
 							} catch (Exception e) {
-								bodyText += "Go to usermapping page check unMapped table Administrator and click to button usermapping : FAILED <br>";
+								bodyText += "Go to usermapping page check table Administrator and click to button usermapping : FAILED <br>";
 								WriteLogFile.logger.info("Can't load  popup when click to button usermapping in :"+ps.getUsermapping_url());
 							}
 							
 						}
 					}else{
-						bodyText += "Go to usermapping page check unMapped table Administrator and click to button usermapping : FAILED<br>";
+						bodyText += "Go to usermapping page check table Administrator and click to button usermapping : FAILED<br>";
 						WriteLogFile.logger.info("Can't load  Unmapped User table in :"+ps.getUsermapping_url());
 					}
 					
 				} catch (Exception e) {
-					bodyText += " Go to usermapping page check unMapped table Administrator and click to button usermapping : FAILED <br>";
+					bodyText += " Go to usermapping page check table Administrator and click to button usermapping : FAILED <br>";
 					WriteLogFile.logger.info("Can't load  Unmapped User table in :"+ps.getUsermapping_url());
 				}
 				/***** end check function of unmapped user ****/
@@ -360,16 +363,16 @@ public class PabloDailyTest {
 				try {
 					//bodyText =" Go to diary configuration check Mapped table</h3><br>";
 					WriteLogFile.logger.info("Go to Administrator Mapping User check Mapped table");
-					WebElement tableMappedUser = driver.findElement(By.id("usermapped"));
+					WebElement tableMappedUser = driver.findElement(By.id("usermapping"));
 					if(tableMappedUser.isDisplayed()){
-						int TableRowCount = selenium.getXpathCount("//table[@id='usermapped']/tbody/tr").intValue();
+						int TableRowCount = selenium.getXpathCount("//table[@id='usermapping']/tbody/tr").intValue();
 						if(TableRowCount > 1){
 							int locationRow = 1;
 							for(int i = 1 ; i < TableRowCount+1;i++){
 								try {
-									String xpathTemp = "//table[@id='usermapped']/tbody/tr["+i+"]/td[1]";
+									String xpathTemp = "//table[@id='usermapping']/tbody/tr["+i+"]/td[2]";
 									String temp =selenium.getText(xpathTemp);
-									if(!temp.equalsIgnoreCase("fakerow")){
+									if(!temp.equalsIgnoreCase("")){
 										locationRow = i;
 										break;
 									}
@@ -378,30 +381,31 @@ public class PabloDailyTest {
 									continue;
 								}
 							}
-							String xpath = "//table[@id='usermapped' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[3][@class='blank']/input[ @class='BtnAviaryEdit edit']";
+							
+							String xpath = "//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[3][@class='blank']/input[ @class='BtnDropboxEdit edit']";
 							selenium.click(xpath);
 							Thread.sleep(2000);
 							try {
 								WebElement popup = driver.findElement(By.id("popupContact"));
 								if(popup.isDisplayed()){
 									selenium.click("popupContactClose");
-									bodyText +="Go to usermapping page check Mapped table Administrator and click to button edit  :PASSED <br>";
-									WriteLogFile.logger.info("Go to usermapping page check Mapped table Administrator and click to button edit  :PASSED ");
+									bodyText +="Go to usermapping page check  table Administrator and click to button edit  :PASSED <br>";
+									WriteLogFile.logger.info("Go to usermapping page check  table Administrator and click to button edit  :PASSED ");
 								}else{
-									bodyText += "Go to usermapping page check Mapped table Administrator and click to button edit : FAILED <br>";
+									bodyText += "Go to usermapping page check  table Administrator and click to button edit : FAILED <br>";
 									WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url());
 								}
 							} catch (Exception e) {
-								bodyText += "Go to usermapping page check Mapped table Administrator and click to button edit : FAILED <br>";
+								bodyText += "Go to usermapping page check  table Administrator and click to button edit : FAILED <br>";
 								WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url());
 							}
 						}
 					}else{
-						bodyText += "Go to usermapping page check Mapped table Administrator and click to button edit : FAILED <br>";
+						bodyText += "Go to usermapping page check  table Administrator and click to button edit : FAILED <br>";
 						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
 					}
 				} catch (Exception e) {
-					bodyText += "Go to usermapping page check Mapped table Administrator and click to button edit : FAILED  <br>";
+					bodyText += "Go to usermapping page check  table Administrator and click to button edit : FAILED  <br>";
 					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
 				}
 				
@@ -411,17 +415,17 @@ public class PabloDailyTest {
 				/****** start check function of aviary mapper user ***/
 				try {
 					//bodyText =" Go to diary configuration check Mapped table</h3><br>";
-					WriteLogFile.logger.info("Go to Administrator  Mapping User check AViary Mapped table");
-					WebElement tableMappedUser = driver.findElement(By.id("usermappedAviary"));
+					WriteLogFile.logger.info("Go to User Mapping  check AViary Mapped table");
+					WebElement tableMappedUser = driver.findElement(By.id("usermappingAviary"));
 					if(tableMappedUser.isDisplayed()){
-						int TableRowCount = selenium.getXpathCount("//table[@id='usermappedAviary']/tbody/tr").intValue();
+						int TableRowCount = selenium.getXpathCount("//table[@id='usermappingAviary']/tbody/tr").intValue();
 						if(TableRowCount > 1){
 							int locationRow = 1;
 							for(int i = 1; i< TableRowCount+1;i++){
 								try {
-									String xpathTemp ="//table[@id='usermappedAviary']/tbody/tr["+i+"]/td[1]";
+									String xpathTemp ="//table[@id='usermappingAviary']/tbody/tr["+i+"]/td[2]";
 									String temp = selenium.getText(xpathTemp);
-									if(temp.equalsIgnoreCase("fakerow")){
+									if(!temp.equalsIgnoreCase("")){
 										locationRow = i;
 										break;
 									}
@@ -430,7 +434,7 @@ public class PabloDailyTest {
 									continue;
 								}
 							}
-							String xpath="//table[@id='usermappedAviary' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[3][@class='blank']/input[ @class='BtnAviaryEdit editAviary']";
+							String xpath="//table[@id='usermappingAviary' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[3][@class='blank']/input[ @class='BtnDropboxEdit editAviary']";
 							selenium.click(xpath);
 							Thread.sleep(2000);
 							try {
@@ -438,23 +442,23 @@ public class PabloDailyTest {
 								if(popup.isDisplayed()){
 									selenium.click("popupContactCloseAviary");
 									Thread.sleep(2000);
-									bodyText +="Go to usermapping page check Mapped table Aviary and click to button edit : PASSED <br>";
+									bodyText +="Go to usermapping page check  table Aviary and click to button edit : PASSED <br>";
 									WriteLogFile.logger.info("Go to diary configuration check unMapped table and click to button edit  passed");
 								}else{
-									bodyText += "Go to usermapping page check Mapped table Aviary and click to button edit : FAILED <br>";
+									bodyText += "Go to usermapping page check  table Aviary and click to button edit : FAILED <br>";
 									WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url());
 								}
 							} catch (Exception e) {
-								bodyText += "Go to usermapping page check Mapped table Aviary and click to button edit : FAILED<br>";
+								bodyText += "Go to usermapping page check  table Aviary and click to button edit : FAILED<br>";
 								WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table aviary user in :"+ps.getUsermapping_url());
 							}
 						}
 					}else{
-						bodyText += "Go to usermapping page check Mapped table Aviary and click to button edit : FAILED<br>";
+						bodyText += "Go to usermapping page check  table Aviary and click to button edit : FAILED<br>";
 						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
 					}
 				} catch (Exception e) {
-					bodyText += "Go to usermapping page check Mapped table Aviary and click to button edit : FAILED <br>";
+					bodyText += "Go to usermapping page check  table Aviary and click to button edit : FAILED <br>";
 					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
 				}
 				
@@ -472,11 +476,16 @@ public class PabloDailyTest {
 						int TableRowCount = selenium.getXpathCount("//table[@id='usermappingAviary']/tbody/tr").intValue();
 						if(TableRowCount > 1){
 							int locationRow = 1; 
-							for(int i = 1 ; i < locationRow+1;i++){
+							for(int i = 1 ; i < TableRowCount+1;i++){
 								try {
-									String xpathTemp = "//table[@id='usermappingAviary']/tbody/tr["+i+"]/td[1]";
-									String temp = selenium.getText(xpathTemp);
-									if(!temp.equalsIgnoreCase("fakerow")){
+									String xpathTemp = "//table[@id='usermappingAviary']/tbody/tr["+i+"]/td[2]";
+									String temp = "";
+									try {
+										temp = selenium.getText(xpathTemp);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+									if(temp.equalsIgnoreCase("")){
 										locationRow = i ; 
 										break;
 									}
@@ -486,32 +495,32 @@ public class PabloDailyTest {
 								}
 							}		 
 							Thread.sleep(1000);
-							String xpath="//table[@id='usermappingAviary']/tbody/tr["+locationRow+"]/td[2]/a[@class='buttonMapAviary goButton']";
+							String xpath="//table[@id='usermappingAviary']/tbody/tr["+locationRow+"]/td[3]/input[@class='BtnDropboxLink buttonMapAviary']";
 							selenium.click(xpath);
 							Thread.sleep(2000);
 							try {
 								WebElement popup = driver.findElement(By.id("popupContactAviary"));
 								if(popup.isDisplayed()){
 									selenium.click("popupContactCloseAviary");
-									bodyText +="Go to usermapping page check unMapped table Aviary and click to button edit : PASSED <br>";
+									bodyText +="Go to usermapping page check  table Aviary and click to button mapping : PASSED <br>";
 									WriteLogFile.logger.info("Go to user mapping check unMapped table aviary and click to button edit  passed");
 								}else{
-									bodyText += " Go to usermapping page check unMapped table Aviary and click to button edit : FAILED<br>";
+									bodyText += " Go to usermapping page check  table Aviary and click to button mapping : FAILED<br>";
 									WriteLogFile.logger.info("Can't load  popup when click to button mapping user in table unmapped user Aviary in :"+ps.getUsermapping_url());
 									//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 								}
 							} catch (Exception e) {
-								bodyText += " Go to usermapping page check unMapped table Aviary and click to button edit : FAILED<br>";
+								bodyText += " Go to usermapping page check  table Aviary and click to button mapping : FAILED<br>";
 								WriteLogFile.logger.info("Can't load  popup when click to button mapping user in table unmapped user Aviary in :"+ps.getUsermapping_url());
 							}
 						}
 					}else{
-						bodyText += " Go to usermapping page check unMapped table Aviary and click to button edit : FAILED<br>";
+						bodyText += " Go to usermapping page check  table Aviary and click to button mapping : FAILED<br>";
 						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					bodyText += " Go to usermapping page check unMapped table Aviary and click to button edit :FAILED<br>";
+					bodyText += " Go to usermapping page check  table Aviary and click to button mapping :FAILED<br>";
 					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
 				}
 				
@@ -1140,7 +1149,7 @@ public class PabloDailyTest {
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
-								String xpathButtonAdd ="//table[@id='dropboxtblconfig' and @class='tablesorter']/tbody/tr["+checkAdd+"]/td[5][@class='blank']/input[@class='dropboxInfo']";
+								String xpathButtonAdd ="//table[@id='dropboxtblconfig' and @class='tablesorter']/tbody/tr["+checkAdd+"]/td[6][@class='blank']/input[@class='dropboxInfo']";
 								WebElement buttonAddUser = driver.findElement(By.xpath(xpathButtonAdd));
 								if(buttonAddUser.isDisplayed()){
 									buttonAddUser.click();
@@ -1223,7 +1232,7 @@ public class PabloDailyTest {
 				/****** start checking dropboxes ********/
 				bodyText +=" <br><h3>Go To dropboxes page</h3><br>";
 				selenium.open(ps.getDropbox_url());
-				Thread.sleep(1000);
+				Thread.sleep(5000);
 				if(selenium.isTextPresent("Dropboxes")){
 					bodyText +=" Go to dropbox download page : PASSED <br>";
 					WriteLogFile.logger.info(" Go to dropbox download page passed");
@@ -1280,10 +1289,10 @@ public class PabloDailyTest {
 								WebElement buttonUpload = DisplayUpload.findElement(By.id("file_input_drop"));
 								String type = buttonUpload.getAttribute("type");
 								if(type.equalsIgnoreCase("file")){
-									bodyText += "  Check the dispaly of upload button : PASSED</h3><br>";
+									bodyText += "  Check the display of upload button : PASSED</h3><br>";
 									WriteLogFile.logger.info(" Go to dropbox download page check button upload passed");
 								}else{
-									bodyText += "  Check the dispaly of upload button : FAILED <br>";
+									bodyText += "  Check the display of upload button : FAILED <br>";
 									WriteLogFile.logger.info("In side The upload file have some error like the button of upload is not type = file : " +ps.getDropbox_url());
 								}
 							} catch (Exception e) {
@@ -1305,7 +1314,7 @@ public class PabloDailyTest {
 							int TableRowCount = selenium.getXpathCount("//table[@id='dropbox']/tbody/tr").intValue();
 							if(TableRowCount > 0){
 								String filetext = selenium.getText("xpath=//table[@id='dropbox' and @class='tablesorter']/tbody/tr[1]/td[2]");
-								if(filetext.equalsIgnoreCase("No file found.")){
+								if(filetext.equalsIgnoreCase("No file found")){
 									bodyText += " Go to dropbox download page check table download : PASSED <br>";
 									WriteLogFile.logger.info(" Go to dropbox download page check table download passed");
 								}else{
