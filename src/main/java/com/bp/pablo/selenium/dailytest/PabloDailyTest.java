@@ -837,7 +837,8 @@ public class PabloDailyTest {
 							bodyText += " Click on Add button: FAILED <br>";
 							WriteLogFile.logger.info("The display of add button is missing");
 						}
-						
+						WebElement closePopup = driver.findElement(By.id("searchCloseAdd"));
+						closePopup.click();
 						int TableRowCount = selenium.getXpathCount("//table[@id='table_bank']/tbody/tr").intValue();
 						if(TableRowCount == 2){
 							String onlyPayroll = selenium.getText("xpath=//table[@id='table_bank']/tbody/tr[2]/td[2]");
@@ -983,7 +984,8 @@ public class PabloDailyTest {
 							bodyText += " Click on Add button: popup should be shown : FAILED  <br>";
 							WriteLogFile.logger.info("The display of  add button in bank holiday is missing");
 						}
-						
+						WebElement closePopup = driver.findElement(By.id("searchCloseAdd"));
+						closePopup.click();
 						int TableRowCount = selenium.getXpathCount("//table[@id='table_bank']/tbody/tr").intValue();
 						if(TableRowCount > 1){
 							try {
@@ -1076,7 +1078,7 @@ public class PabloDailyTest {
 													bodyText += " The select duration in add dropbox popup have data : FAILED  <br>";
 													WriteLogFile.logger.info("The select durations in add dropbox popup is null");
 												}else{
-													selectDuration.click();
+													//selectDuration.click();
 													bodyText += " The select duration in add dropbox popup have data : PASSED <br>";
 													WriteLogFile.logger.info(" Go to dropbox administrator passed");
 												}
@@ -1091,7 +1093,7 @@ public class PabloDailyTest {
 													bodyText += " The select owner in add dropbox popup  have data : FAILED  <br>";
 													WriteLogFile.logger.info("The select owner in add dropbox popup is null");
 												}else{
-													selectOwner.click();
+													//selectOwner.click();
 													Thread.sleep(1000);
 													buttonAddDropbox.click();
 													Thread.sleep(1000);

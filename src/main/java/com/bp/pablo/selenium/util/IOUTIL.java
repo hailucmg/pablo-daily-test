@@ -162,27 +162,4 @@ public class IOUTIL {
 	}
 	
 	
-	/*
-	public static DatabaseInfor loadInfor(String type){
-		DatabaseInfor dbInfor = new DatabaseInfor();
-		Properties pro = new Properties();
-		if(type.equalsIgnoreCase("aviary")){
-			try {
-			pro.load(IOUTIL.class.getResourceAsStream("/" + AVIARY_PROPERTIES));
-			} catch (IOException e) {
-				SendMailSSL.sendMailCMG("<h3>aviaryconnection.properties is null!</h3>","file aviaryconnection.properties is null");
-				return null;
-			}
-		}
-		dbInfor.setSystem(pro.getProperty("system"));
-		dbInfor.setEnvironment(pro.getProperty("environment"));
-		dbInfor.setOperation(pro.getProperty("operation"));
-		dbInfor.setServer(pro.getProperty("server"));
-		dbInfor.setInstance_name(pro.getProperty("instance_name"));
-		dbInfor.setInstance_type(pro.getProperty("instance_type"));
-		dbInfor.setUsername(pro.getProperty("username"));
-		dbInfor.setPassword(pro.getProperty("password"));
-		return null;
-	}
-	*/
 }
