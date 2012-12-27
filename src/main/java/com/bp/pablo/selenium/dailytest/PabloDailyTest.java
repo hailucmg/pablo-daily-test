@@ -552,7 +552,7 @@ public class PabloDailyTest {
 							try {
 								//bodyText = " Go to diary colour configuration the table in top have 3 <tr> passeed</h3><br>";
 								WriteLogFile.logger.info("Go to diary color configuration the table in top have 3 <tr>  passeed");
-								WebElement buttonEditOfMouseOver = tableTop.findElement(By.xpath("table[@id='tableCasecode' and @class='tablesorter']/tbody/tr[1]/td[7][@class='blank']/a[@class='goButton editColor']"));
+								WebElement buttonEditOfMouseOver = tableTop.findElement(By.xpath("table[@id='tableCasecode' and @class='tablesorter']/tbody/tr[1]/td[7][@class='blank']/input[@class='BtnDropboxEdit editColor']"));
 								if(buttonEditOfMouseOver.isDisplayed()){
 									bodyText += " Go to diary colour configuration check the button edit is not display in the mouseover : FAILED<br>";
 									WriteLogFile.logger.info("THe button edit is display in the mouseover in:"+ps.getDiary_color_config());
@@ -567,7 +567,7 @@ public class PabloDailyTest {
 							}
 							
 							try {
-								WebElement buttonEditOfDisclosuer = tableTop.findElement(By.xpath("//table[@id='tableCasecode' and @class='tablesorter']/tbody/tr[2]/td[7][@class='blank']/a[@class='goButton editColor']"));
+								WebElement buttonEditOfDisclosuer = tableTop.findElement(By.xpath("//table[@id='tableCasecode' and @class='tablesorter']/tbody/tr[2]/td[7][@class='blank']/input[@class='BtnDropboxEdit editColor']"));
 								if(buttonEditOfDisclosuer.isDisplayed()){
 									bodyText += " Go to diary colour configuration check the button edit is display in the disclosure : PASSED<br>";
 									WriteLogFile.logger.info("Go to diary color configuration check the button edit is display in the disclosure passeed");
@@ -583,7 +583,7 @@ public class PabloDailyTest {
 							}
 							
 							try {
-								WebElement buttonEditOfpayroll = tableTop.findElement(By.xpath("//table[@id='tableCasecode' and @class='tablesorter']/tbody/tr[3]/td[7][@class='blank']/a[@class='goButton editColor']"));
+								WebElement buttonEditOfpayroll = tableTop.findElement(By.xpath("//table[@id='tableCasecode' and @class='tablesorter']/tbody/tr[3]/td[7][@class='blank']/input[@class='BtnDropboxEdit editColor']"));
 								if(buttonEditOfpayroll.isDisplayed()){
 									bodyText += " Go to diary colour configuration check the button edit is display in the payroll : PASSED<br>";
 									WriteLogFile.logger.info("Go to diary color configuration check the button edit is display in the payroll passeed");
@@ -623,7 +623,7 @@ public class PabloDailyTest {
 					if(tableBottom.isDisplayed()){
 						try {
 							
-							WebElement buttAdd = tableBottom.findElement(By.xpath("//table[@id='tableCasecode1' and @class='tablesorter']/thead/tr/th[8]/a[@id='addBtn' and @class='goButton addColor']"));
+							WebElement buttAdd = tableBottom.findElement(By.xpath("//table[@id='tableCasecode1' and @class='tablesorter']/thead/tr/th[8]/input[@id='addBtn' and @class='BtnDropboxAdd addColor']"));
 							if(buttAdd.isDisplayed()){
 								bodyText += " Go to diary colour configuration check the button add is display in the table bottom : PASSED<br>";
 								WriteLogFile.logger.info("Go to diary color configuration check the button edit is display in the table bottom passeed");
@@ -754,7 +754,7 @@ public class PabloDailyTest {
 											}
 									}
 									if(checkDupplicate){
-										bodyText += " Dupplicated user "+  userDupplicate + " in :</h3>"  +ps.getTeam_allocation_url()+"<br>";
+										bodyText += " Dupplicated user "+  userDupplicate + " in :</h3>"  + ps.getTeam_allocation_url()+"<br>";
 										WriteLogFile.logger.info("Dupplicated user "+  userDupplicate + " in :"  +ps.getTeam_allocation_url());
 										//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
 									}else{
@@ -792,7 +792,7 @@ public class PabloDailyTest {
 					WebElement tablePayroll = driver.findElement(By.id("table_bank"));
 					if(tablePayroll.isDisplayed()){
 						try {
-							WebElement buttonAdd = tablePayroll.findElement(By.xpath("//td[@id='addRow' and @class='blank']/a[@class='goButton']"));
+							WebElement buttonAdd = tablePayroll.findElement(By.xpath("//table[@id='table_bank' and @class='tablesorter']/thead/tr/th[3][@class='header']/input[@id='addRow' and @class='BtnDropboxAdd addDropbox']"));
 							if(buttonAdd.isDisplayed()){
 								buttonAdd.click();
 								Thread.sleep(1000);
@@ -839,54 +839,14 @@ public class PabloDailyTest {
 						}
 						WebElement closePopup = driver.findElement(By.id("searchCloseAdd"));
 						closePopup.click();
+						Thread.sleep(5000);
 						int TableRowCount = selenium.getXpathCount("//table[@id='table_bank']/tbody/tr").intValue();
-						if(TableRowCount == 2){
-							String onlyPayroll = selenium.getText("xpath=//table[@id='table_bank']/tbody/tr[2]/td[2]");
-							DateFormat formatter =  new SimpleDateFormat("dd-MM-yy");
-							Date date1 = new Date();
-							String datetest = formatter.format(date1);
-							Date dateCur = (Date)formatter.parse(datetest);
-							Date date2 = (Date)formatter.parse(onlyPayroll.trim());
-							if(date2.after(dateCur)){
-								try {
-									WebElement buttonEdit = driver.findElement(By.xpath("//table[@id='table_bank']/tbody/tr[2]/td[3]/a"));
-									if(buttonEdit.isDisplayed()){
-										buttonEdit.click();
-										Thread.sleep(1000);
-										try {
-											WebElement popupEdit = driver.findElement(By.id("searchFormEdit"));
-											if(popupEdit.isDisplayed()){
-												bodyText += "<br>Edit pop-up of an entry if there is one : PASSED <br>";
-												WriteLogFile.logger.info("Go to Payroll check dropdowlist in popup when click edit button passeed");
-											}else{
-												bodyText += " Edit pop-up of an entry if there is one : FAILED  <br>";
-												WriteLogFile.logger.info("The display of  popup when  edit button is missing");
-												//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
-											}
-										} catch (Exception e) {
-											bodyText += " Edit pop-up of an entry if there is one : FAILED  <br>";
-											WriteLogFile.logger.info("The display of  popup when  edit button is missing");
-											//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");	
-										}
-									}else{
-										bodyText += " Edit pop-up of an entry if there is one : FAILED  <br>";
-										WriteLogFile.logger.info("The display of  edit button in payroll is missing");
-									}
-								} catch (Exception e) {
-									bodyText += " Edit pop-up of an entry if there is one : FAILED  <br>";
-									WriteLogFile.logger.info("The display of  edit button in payroll is missing");
-								}
-								
-							}else{
-								bodyText += " Edit pop-up of an entry if there is one : PASSED<br>";
-								WriteLogFile.logger.info("Go to Payroll check  popup when click edit button because the payroll date is the past date not show the edit button passeed");	
-							}
-						}else if(TableRowCount > 2){
+						if(TableRowCount >= 1){
 							try {
-								WebElement buttonEdit = driver.findElement(By.xpath("//table[@id='table_bank']/tbody/tr[3]/td[3]/a"));
+								WebElement buttonEdit = driver.findElement(By.xpath("//table[@id='table_bank' and @class='tablesorter']/tbody[@id='table_tbody']/tr[1]/td[3][@class='blank']/input[1][@class='BtnDropboxEdit editDropbox']"));
 								if(buttonEdit.isDisplayed()){
 									buttonEdit.click();
-									Thread.sleep(1000);
+									Thread.sleep(5000);
 									try {
 										WebElement popupEdit = driver.findElement(By.id("searchFormEdit"));
 										if(popupEdit.isDisplayed()){
@@ -944,7 +904,7 @@ public class PabloDailyTest {
 					WebElement tableBank = driver.findElement(By.id("table_bank"));
 					if(tableBank.isDisplayed()){
 						try {
-							WebElement buttonAdd = tableBank.findElement(By.xpath("//td[@id='addRow' and @class='blank']/a[@class='goButton']"));
+							WebElement buttonAdd = tableBank.findElement(By.xpath("//table[@id='table_bank' and @class='tablesorter']/thead/tr/th[3][@class='header']/input[@id='addRow' and @class='BtnDropboxAdd addDropbox']"));
 							if(buttonAdd.isDisplayed()){
 								buttonAdd.click();
 								Thread.sleep(1000);
@@ -952,7 +912,7 @@ public class PabloDailyTest {
 									WebElement popupAdd = driver.findElement(By.id("searchFormAdd"));
 									if(popupAdd.isDisplayed()){
 										try {
-											WebElement submitButton = popupAdd.findElement(By.id("submitButton"));
+											WebElement submitButton = popupAdd.findElement(By.id("btnAddDropBox"));
 											if(submitButton.isDisplayed()){
 												bodyText += " Click on Add button: popup should be shown PASSED<br>";
 												WriteLogFile.logger.info("Go to Bank holiday test function Add button is show popup passeed");
@@ -986,18 +946,19 @@ public class PabloDailyTest {
 						}
 						WebElement closePopup = driver.findElement(By.id("searchCloseAdd"));
 						closePopup.click();
+						Thread.sleep(3000);
 						int TableRowCount = selenium.getXpathCount("//table[@id='table_bank']/tbody/tr").intValue();
-						if(TableRowCount > 1){
+						if(TableRowCount >= 1){
 							try {
-								WebElement buttonEdit = driver.findElement(By.xpath("//div[@id='table_info']/table[@id='table_bank']/tbody/tr[2]/td[3][@class='blank']/a[@class='goButton']"));
+								WebElement buttonEdit = driver.findElement(By.xpath("//table[@id='table_bank' and @class='tablesorter']/tbody[@id='table_tbody']/tr[1]/td[3][@class='blank']/input[1][@class='BtnDropboxEdit editDropbox']"));
 								if(buttonEdit.isDisplayed()){
 									buttonEdit.click();
-									Thread.sleep(1000);
+									Thread.sleep(5000);
 									try {
 										WebElement popupEdit = driver.findElement(By.id("searchFormEdit"));
 										if(popupEdit.isDisplayed()){
 											try {
-												WebElement buttonUpdate = driver.findElement(By.xpath("//div[@id='searchFormDiv']/table/tbody/tr[3]/td[@id='checktd' and @class='blank']/a"));
+												WebElement buttonUpdate = driver.findElement(By.xpath("//table/tbody/tr[3]/td[3]/input[@id='editButton' and @class='BtnDropboxEdit saveDropbox']"));
 												if(buttonUpdate.isDisplayed()){
 													bodyText += " Click on Edit button: popup should be shown : PASSED <br>";
 													WriteLogFile.logger.info("Go to Bank holiday all function is passed");
