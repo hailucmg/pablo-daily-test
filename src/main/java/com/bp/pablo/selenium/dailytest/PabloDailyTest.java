@@ -296,7 +296,7 @@ public class PabloDailyTest {
 				bodyText +=" <br><h3>Go to Usermapping</h3><br>";
 				selenium.open(ps.getUsermapping_url());
 				Thread.sleep(2000);
-				if(selenium.isTextPresent("Administrator Mapping User")){
+				if(selenium.isTextPresent("User mapping")){
 					bodyText +="Load usermapping with text Administrator Mapping User  : PASSED <br>";
 					WriteLogFile.logger.info("Go to diary configuration passeed");
 				}else{
@@ -311,39 +311,138 @@ public class PabloDailyTest {
 					if(tableUnmap.isDisplayed()){
 						int TableRowCount = selenium.getXpathCount("//table[@id='usermapping']/tbody/tr").intValue();
 						if(TableRowCount > 1){
-							int locationRow = 1;
+							//start checking open cms user not null
 							for(int i = 1 ; i < TableRowCount+1;i++){
 								try {
-									String xpathTemp = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+i+"]/td[2]";
+									String xpathTemp = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+i+"]/td[1]";
 									String temp = selenium.getText(xpathTemp);
 									if(temp.equalsIgnoreCase("")){
-										locationRow = i;
-										break;
+										bodyText += "Load usermapping with text opencms Mapping User  :  FAILED in td :"+i+"<br>";
 									}
 								} catch (Exception e) {
 									e.printStackTrace();
 									continue;
 								}
 							}
-							String xpath ="//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[3]/input[@class='BtnDropboxLink buttonMap']";
-							System.out.println(xpath);
-							selenium.click(xpath);
-							Thread.sleep(2000);
-							try {
-								
-								WebElement popup = driver.findElement(By.id("popupContact"));
-								if(popup.isDisplayed()){
-									bodyText +="Go to usermapping page check  table Administrator and click to button usermapping : PASSED <br>";
-									WriteLogFile.logger.info("Go to usermapping check  table and click to button usermapping passed");
-									selenium.click("popupContactClose");
-									Thread.sleep(1000);
-								}else{
-									bodyText += "Go to usermapping page check  table Administrator and click to button usermapping : FAILED <br>";
-									WriteLogFile.logger.info("Can't load  popup when click to button usermapping in :"+ps.getUsermapping_url());
+							//check BP user
+							for(int j = 1; j < TableRowCount+1;j++){
+								try {
+									String xpathEditMappingBPUser = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[2]/input[@class='BtnDropboxEdit edit']";
+									String xpathMappingBPUser = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[2]/input[@class='BtnDropboxLink buttonMap']";
+									boolean check = false;
+									WebElement buttonEditMapping = driver.findElement(By.xpath(xpathEditMappingBPUser));
+									if(buttonEditMapping.isDisplayed()){
+										check = true;
+										buttonEditMapping.click();
+										WebElement popup = driver.findElement(By.id("popupContact"));
+										if(popup.isDisplayed()){
+											bodyText +="Go to usermapping page click to button usermapping BPUSER : PASSED <br>";
+										}else{
+											bodyText +="Go to usermapping page click to button usermapping BPUSER : Fail(popup not display) <br>";
+										}
+									}
+									if(!check){
+										WebElement buttonMapping = driver.findElement(By.xpath(xpathMappingBPUser));
+										if(buttonMapping.isDisplayed()){
+											check = true;
+											buttonMapping.click();
+											WebElement popup = driver.findElement(By.id("popupContact"));
+											if(popup.isDisplayed()){
+												bodyText +="Go to usermapping page click to button edit mapping BPUSER : PASSED <br>";
+											}else{
+												bodyText +="Go to usermapping page click to button edit mapping BPUSER : Fail(popup not display)<br>";
+											}
+
+										}
+									}
+									if(!check){
+										bodyText +="Go to usermapping page can not find button usermapping or edit mapping in row : " + j +" of column BP user <br>";
+									}
+									
+								} catch (Exception e) {
+									e.printStackTrace();
+									continue;
 								}
-							} catch (Exception e) {
-								bodyText += "Go to usermapping page check table Administrator and click to button usermapping : FAILED <br>";
-								WriteLogFile.logger.info("Can't load  popup when click to button usermapping in :"+ps.getUsermapping_url());
+							}
+							//check aviary user
+							for(int j = 1; j < TableRowCount+1;j++){
+								try {
+									String xpathEditMappingAviary = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[3]/input[@class='BtnDropboxEdit editAviary']";
+									String xpathMappingAviary = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[3]/input[@class='BtnDropboxLink buttonMapAviary']";
+									boolean check = false;
+									WebElement buttonEditMapping = driver.findElement(By.xpath(xpathEditMappingAviary));
+									if(buttonEditMapping.isDisplayed()){
+										check = true;
+										buttonEditMapping.click();
+										WebElement popup = driver.findElement(By.id("popupContact"));
+										if(popup.isDisplayed()){
+											bodyText +="Go to usermapping page click to button usermapping Aviary : PASSED <br>";
+										}else{
+											bodyText +="Go to usermapping page click to button usermapping Aviary : Fail(popup not display) <br>";
+										}
+									}
+									if(!check){
+										WebElement buttonMapping = driver.findElement(By.xpath(xpathMappingAviary));
+										if(buttonMapping.isDisplayed()){
+											check = true;
+											buttonMapping.click();
+											WebElement popup = driver.findElement(By.id("popupContact"));
+											if(popup.isDisplayed()){
+												bodyText +="Go to usermapping page click to button edit mapping Aviary : PASSED <br>";
+											}else{
+												bodyText +="Go to usermapping page click to button edit mapping Aviary : Fail(popup not display)<br>";
+											}
+
+										}
+									}
+									if(!check){
+										bodyText +="Go to usermapping page can not find button usermapping or edit mapping in row : " + j +"  of column aviary<br>";
+									}
+									
+								} catch (Exception e) {
+									e.printStackTrace();
+									continue;
+								}
+							}
+							//checking pensionline user
+							for(int j = 1; j < TableRowCount+1;j++){
+								try {
+									String xpathEditMappingPLUser = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[4]/input[@class='BtnDropboxEdit editPL']";
+									String xpathMappingBPPLUser = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[4]/input[@class='BtnDropboxLink buttonMapPL']";
+									boolean check = false;
+									WebElement buttonEditMapping = driver.findElement(By.xpath(xpathEditMappingPLUser));
+									if(buttonEditMapping.isDisplayed()){
+										check = true;
+										buttonEditMapping.click();
+										WebElement popup = driver.findElement(By.id("popupContact"));
+										if(popup.isDisplayed()){
+											bodyText +="Go to usermapping page click to button usermapping PL user : PASSED <br>";
+										}else{
+											bodyText +="Go to usermapping page click to button usermapping PL user : Fail(popup not display) <br>";
+										}
+									}
+									if(!check){
+										WebElement buttonMapping = driver.findElement(By.xpath(xpathMappingBPPLUser));
+										if(buttonMapping.isDisplayed()){
+											check = true;
+											buttonMapping.click();
+											WebElement popup = driver.findElement(By.id("popupContact"));
+											if(popup.isDisplayed()){
+												bodyText +="Go to usermapping page click to button edit mapping PL user : PASSED <br>";
+											}else{
+												bodyText +="Go to usermapping page click to button edit mapping PL user : Fail(popup not display)<br>";
+											}
+
+										}
+									}
+									if(!check){
+										bodyText +="Go to usermapping page can not find button usermapping or edit mapping in row : " + j +" of column PL user <br>";
+									}
+									
+								} catch (Exception e) {
+									e.printStackTrace();
+									continue;
+								}
 							}
 							
 						}
@@ -353,178 +452,9 @@ public class PabloDailyTest {
 					}
 					
 				} catch (Exception e) {
-					bodyText += " Go to usermapping page check table Administrator and click to button usermapping : FAILED <br>";
+					bodyText += " Can't load  Unmapped User table in :"+ ps.getUsermapping_url() +"<br>";
 					WriteLogFile.logger.info("Can't load  Unmapped User table in :"+ps.getUsermapping_url());
 				}
-				/***** end check function of unmapped user ****/
-				
-				/***** start check function of mapped user ****/
-				
-				try {
-					//bodyText =" Go to diary configuration check Mapped table</h3><br>";
-					WriteLogFile.logger.info("Go to Administrator Mapping User check Mapped table");
-					WebElement tableMappedUser = driver.findElement(By.id("usermapping"));
-					if(tableMappedUser.isDisplayed()){
-						int TableRowCount = selenium.getXpathCount("//table[@id='usermapping']/tbody/tr").intValue();
-						if(TableRowCount > 1){
-							int locationRow = 1;
-							for(int i = 1 ; i < TableRowCount+1;i++){
-								try {
-									String xpathTemp = "//table[@id='usermapping']/tbody/tr["+i+"]/td[2]";
-									String temp =selenium.getText(xpathTemp);
-									if(!temp.equalsIgnoreCase("")){
-										locationRow = i;
-										break;
-									}
-								} catch (Exception e) {
-									e.printStackTrace();
-									continue;
-								}
-							}
-							
-							String xpath = "//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[3][@class='blank']/input[ @class='BtnDropboxEdit edit']";
-							selenium.click(xpath);
-							Thread.sleep(2000);
-							try {
-								WebElement popup = driver.findElement(By.id("popupContact"));
-								if(popup.isDisplayed()){
-									selenium.click("popupContactClose");
-									bodyText +="Go to usermapping page check  table Administrator and click to button edit  :PASSED <br>";
-									WriteLogFile.logger.info("Go to usermapping page check  table Administrator and click to button edit  :PASSED ");
-								}else{
-									bodyText += "Go to usermapping page check  table Administrator and click to button edit : FAILED <br>";
-									WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url());
-								}
-							} catch (Exception e) {
-								bodyText += "Go to usermapping page check  table Administrator and click to button edit : FAILED <br>";
-								WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url());
-							}
-						}
-					}else{
-						bodyText += "Go to usermapping page check  table Administrator and click to button edit : FAILED <br>";
-						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
-					}
-				} catch (Exception e) {
-					bodyText += "Go to usermapping page check  table Administrator and click to button edit : FAILED  <br>";
-					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
-				}
-				
-				/******** end check function of mapped user ********/
-				
-				
-				/****** start check function of aviary mapper user ***/
-				try {
-					//bodyText =" Go to diary configuration check Mapped table</h3><br>";
-					WriteLogFile.logger.info("Go to User Mapping  check AViary Mapped table");
-					WebElement tableMappedUser = driver.findElement(By.id("usermappingAviary"));
-					if(tableMappedUser.isDisplayed()){
-						int TableRowCount = selenium.getXpathCount("//table[@id='usermappingAviary']/tbody/tr").intValue();
-						if(TableRowCount > 1){
-							int locationRow = 1;
-							for(int i = 1; i< TableRowCount+1;i++){
-								try {
-									String xpathTemp ="//table[@id='usermappingAviary']/tbody/tr["+i+"]/td[2]";
-									String temp = selenium.getText(xpathTemp);
-									if(!temp.equalsIgnoreCase("")){
-										locationRow = i;
-										break;
-									}
-								} catch (Exception e) {
-									e.printStackTrace();
-									continue;
-								}
-							}
-							String xpath="//table[@id='usermappingAviary' and @class='tablesorter']/tbody/tr["+locationRow+"]/td[3][@class='blank']/input[ @class='BtnDropboxEdit editAviary']";
-							selenium.click(xpath);
-							Thread.sleep(2000);
-							try {
-								WebElement popup = driver.findElement(By.id("popupContactAviary"));
-								if(popup.isDisplayed()){
-									selenium.click("popupContactCloseAviary");
-									Thread.sleep(2000);
-									bodyText +="Go to usermapping page check  table Aviary and click to button edit : PASSED <br>";
-									WriteLogFile.logger.info("Go to diary configuration check unMapped table and click to button edit  passed");
-								}else{
-									bodyText += "Go to usermapping page check  table Aviary and click to button edit : FAILED <br>";
-									WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table user in :"+ps.getUsermapping_url());
-								}
-							} catch (Exception e) {
-								bodyText += "Go to usermapping page check  table Aviary and click to button edit : FAILED<br>";
-								WriteLogFile.logger.info("Can't load  popup when click to button edit of Mapped table aviary user in :"+ps.getUsermapping_url());
-							}
-						}
-					}else{
-						bodyText += "Go to usermapping page check  table Aviary and click to button edit : FAILED<br>";
-						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
-					}
-				} catch (Exception e) {
-					bodyText += "Go to usermapping page check  table Aviary and click to button edit : FAILED <br>";
-					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
-				}
-				
-				
-				/****** end check function of aviary mapper user ***/
-				
-				
-				
-				/****** start check function of aviary unmapper user ***/
-				try {
-					//bodyText =" Go to diary configuration check Mapped table</h3><br>";
-					WriteLogFile.logger.info("Go to Administrator  Mapping User check AViary unMapped table");
-					WebElement tableMappedUser = driver.findElement(By.id("usermappingAviary"));
-					if(tableMappedUser.isDisplayed()){
-						int TableRowCount = selenium.getXpathCount("//table[@id='usermappingAviary']/tbody/tr").intValue();
-						if(TableRowCount > 1){
-							int locationRow = 1; 
-							for(int i = 1 ; i < TableRowCount+1;i++){
-								try {
-									String xpathTemp = "//table[@id='usermappingAviary']/tbody/tr["+i+"]/td[2]";
-									String temp = "";
-									try {
-										temp = selenium.getText(xpathTemp);
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-									if(temp.equalsIgnoreCase("")){
-										locationRow = i ; 
-										break;
-									}
-								} catch (Exception e) {
-									e.printStackTrace();
-									continue;
-								}
-							}		 
-							Thread.sleep(1000);
-							String xpath="//table[@id='usermappingAviary']/tbody/tr["+locationRow+"]/td[3]/input[@class='BtnDropboxLink buttonMapAviary']";
-							selenium.click(xpath);
-							Thread.sleep(2000);
-							try {
-								WebElement popup = driver.findElement(By.id("popupContactAviary"));
-								if(popup.isDisplayed()){
-									selenium.click("popupContactCloseAviary");
-									bodyText +="Go to usermapping page check  table Aviary and click to button mapping : PASSED <br>";
-									WriteLogFile.logger.info("Go to user mapping check unMapped table aviary and click to button edit  passed");
-								}else{
-									bodyText += " Go to usermapping page check  table Aviary and click to button mapping : FAILED<br>";
-									WriteLogFile.logger.info("Can't load  popup when click to button mapping user in table unmapped user Aviary in :"+ps.getUsermapping_url());
-									//SendMailSSL.sendMailCMG(bodyText, "Pablo server have a problem");
-								}
-							} catch (Exception e) {
-								bodyText += " Go to usermapping page check  table Aviary and click to button mapping : FAILED<br>";
-								WriteLogFile.logger.info("Can't load  popup when click to button mapping user in table unmapped user Aviary in :"+ps.getUsermapping_url());
-							}
-						}
-					}else{
-						bodyText += " Go to usermapping page check  table Aviary and click to button mapping : FAILED<br>";
-						WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					bodyText += " Go to usermapping page check  table Aviary and click to button mapping :FAILED<br>";
-					WriteLogFile.logger.info("Can't load mapped User table in :"+ps.getUsermapping_url());
-				}
-				
-				/****** end check function of aviary unmapper user ***/
 				
 				
 				/******* end checking mapping *******/
@@ -1530,7 +1460,7 @@ public class PabloDailyTest {
 										for(int i = 1 ; i <= TableRowCount;i++){
 											try {
 												Thread.sleep(5000);
-												WebElement bttEdit = driver.findElement(By.xpath("//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[10]/input[@id='btnEditDataSource' and @class='BtnDsEdit editDs']"));
+												WebElement bttEdit = driver.findElement(By.xpath("//table[@id='datasourcetbl' and @class='tablesorter']/tbody/tr["+i+"]/td[11]/input[@id='btnEditDataSource' and @class='BtnDsEdit editDs']"));
 												WriteLogFile.logger.info("row : " + i);
 												if(bttEdit.isDisplayed()){
 													bttEdit.click();
