@@ -310,6 +310,7 @@ public class PabloDailyTest {
 					WebElement tableUnmap = driver.findElement(By.id("usermapping"));
 					if(tableUnmap.isDisplayed()){
 						int TableRowCount = selenium.getXpathCount("//table[@id='usermapping']/tbody/tr").intValue();
+						System.out.println(TableRowCount);
 						if(TableRowCount > 1){
 							//start checking open cms user not null
 							for(int i = 1 ; i < TableRowCount+1;i++){
@@ -325,79 +326,83 @@ public class PabloDailyTest {
 								}
 							}
 							//check BP user
+							boolean checkExistEditButtonBP = false;
+							boolean checkExistMappingButtonBP = false;
 							for(int j = 1; j < TableRowCount+1;j++){
 								try {
-									String xpathEditMappingBPUser = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[2]/input[@class='BtnDropboxEdit edit']";
-									String xpathMappingBPUser = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[2]/input[@class='BtnDropboxLink buttonMap']";
-									boolean check = false;
-									WebElement buttonEditMapping = driver.findElement(By.xpath(xpathEditMappingBPUser));
-									if(buttonEditMapping.isDisplayed()){
-										check = true;
-										buttonEditMapping.click();
-										WebElement popup = driver.findElement(By.id("popupContact"));
-										if(popup.isDisplayed()){
-											bodyText +="Go to usermapping page click to button usermapping BPUSER : PASSED <br>";
-										}else{
-											bodyText +="Go to usermapping page click to button usermapping BPUSER : Fail(popup not display) <br>";
+									String xpathEditMappingBPUser = "//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[2]/input[@class='BtnDropboxEdit edit']";
+									String xpathMappingBPUser = "//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[2]/input[@class='BtnDropboxLink buttonMap']";
+									if(!checkExistEditButtonBP){
+										WebElement buttonEditMapping = driver.findElement(By.xpath(xpathEditMappingBPUser));
+										if(buttonEditMapping.isDisplayed()){
+											
+											buttonEditMapping.click();
+											WebElement popup = driver.findElement(By.id("popupContact"));
+											if(popup.isDisplayed()){
+												bodyText +="Go to usermapping page click to button edit usermapping BPUSER : PASSED <br>";
+												checkExistEditButtonBP = true;
+											}else{
+												bodyText +="Go to usermapping page click to button edit usermapping BPUSER : Fail(popup not display) <br>";
+											}
 										}
 									}
-									if(!check){
+									
+									if(!checkExistMappingButtonBP){
 										WebElement buttonMapping = driver.findElement(By.xpath(xpathMappingBPUser));
 										if(buttonMapping.isDisplayed()){
-											check = true;
+											
 											buttonMapping.click();
 											WebElement popup = driver.findElement(By.id("popupContact"));
 											if(popup.isDisplayed()){
-												bodyText +="Go to usermapping page click to button edit mapping BPUSER : PASSED <br>";
+												bodyText +="Go to usermapping page click to button  mapping BPUSER : PASSED <br>";
+												checkExistMappingButtonBP = true;
 											}else{
-												bodyText +="Go to usermapping page click to button edit mapping BPUSER : Fail(popup not display)<br>";
+												bodyText +="Go to usermapping page click to button  mapping BPUSER : Fail(popup not display)<br>";
 											}
 
 										}
 									}
-									if(!check){
-										bodyText +="Go to usermapping page can not find button usermapping or edit mapping in row : " + j +" of column BP user <br>";
-									}
-									
 								} catch (Exception e) {
 									e.printStackTrace();
 									continue;
 								}
 							}
+							boolean checkExistEditButtonAVIARY = false;
+							boolean checkExistMappingButtonAVIARY = false;
 							//check aviary user
 							for(int j = 1; j < TableRowCount+1;j++){
 								try {
-									String xpathEditMappingAviary = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[3]/input[@class='BtnDropboxEdit editAviary']";
-									String xpathMappingAviary = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[3]/input[@class='BtnDropboxLink buttonMapAviary']";
-									boolean check = false;
+									String xpathEditMappingAviary = "//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[3]/input[@class='BtnDropboxEdit editAviary']";
+									String xpathMappingAviary = "//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[3]/input[@class='BtnDropboxLink buttonMapAviary']";
+								if(!checkExistEditButtonAVIARY){
 									WebElement buttonEditMapping = driver.findElement(By.xpath(xpathEditMappingAviary));
 									if(buttonEditMapping.isDisplayed()){
-										check = true;
 										buttonEditMapping.click();
 										WebElement popup = driver.findElement(By.id("popupContact"));
 										if(popup.isDisplayed()){
-											bodyText +="Go to usermapping page click to button usermapping Aviary : PASSED <br>";
+											bodyText +="Go to usermapping page click to button edit usermapping Aviary : PASSED <br>";
+											checkExistEditButtonAVIARY = true;
 										}else{
-											bodyText +="Go to usermapping page click to button usermapping Aviary : Fail(popup not display) <br>";
+											bodyText +="Go to usermapping page click to button edit usermapping Aviary : Fail(popup not display) <br>";
 										}
-									}
-									if(!check){
+									}	
+								}
+									
+									if(!checkExistMappingButtonAVIARY){
 										WebElement buttonMapping = driver.findElement(By.xpath(xpathMappingAviary));
 										if(buttonMapping.isDisplayed()){
-											check = true;
 											buttonMapping.click();
 											WebElement popup = driver.findElement(By.id("popupContact"));
 											if(popup.isDisplayed()){
-												bodyText +="Go to usermapping page click to button edit mapping Aviary : PASSED <br>";
+												bodyText +="Go to usermapping page click to button  mapping Aviary : PASSED <br>";
+												checkExistMappingButtonAVIARY = true;
 											}else{
-												bodyText +="Go to usermapping page click to button edit mapping Aviary : Fail(popup not display)<br>";
+												bodyText +="Go to usermapping page click to button  mapping Aviary : Fail(popup not display)<br>";
 											}
 
 										}
 									}
-									if(!check){
-										bodyText +="Go to usermapping page can not find button usermapping or edit mapping in row : " + j +"  of column aviary<br>";
-									}
+								
 									
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -405,39 +410,43 @@ public class PabloDailyTest {
 								}
 							}
 							//checking pensionline user
+							
+							boolean checkExistEditButtonPL = false;
+							boolean checkExistMappingButtonPL = false;
 							for(int j = 1; j < TableRowCount+1;j++){
 								try {
-									String xpathEditMappingPLUser = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[4]/input[@class='BtnDropboxEdit editPL']";
-									String xpathMappingBPPLUser = "xpath=//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[4]/input[@class='BtnDropboxLink buttonMapPL']";
-									boolean check = false;
-									WebElement buttonEditMapping = driver.findElement(By.xpath(xpathEditMappingPLUser));
-									if(buttonEditMapping.isDisplayed()){
-										check = true;
-										buttonEditMapping.click();
-										WebElement popup = driver.findElement(By.id("popupContact"));
-										if(popup.isDisplayed()){
-											bodyText +="Go to usermapping page click to button usermapping PL user : PASSED <br>";
-										}else{
-											bodyText +="Go to usermapping page click to button usermapping PL user : Fail(popup not display) <br>";
+									String xpathEditMappingPLUser = "//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[4]/input[@class='BtnDropboxEdit editPL']";
+									String xpathMappingBPPLUser = "//table[@id='usermapping' and @class='tablesorter']/tbody/tr["+j+"]/td[4]/input[@class='BtnDropboxLink buttonMapPL']";
+									if(!checkExistEditButtonPL){
+										WebElement buttonEditMapping = driver.findElement(By.xpath(xpathEditMappingPLUser));
+										if(buttonEditMapping.isDisplayed()){
+											
+											buttonEditMapping.click();
+											WebElement popup = driver.findElement(By.id("popupContact"));
+											if(popup.isDisplayed()){
+												bodyText +="Go to usermapping page click to button usermapping PL user : PASSED <br>";
+												checkExistEditButtonPL = true;
+											}else{
+												bodyText +="Go to usermapping page click to button usermapping PL user : Fail(popup not display) <br>";
+											}
 										}
 									}
-									if(!check){
+									
+									if(!checkExistMappingButtonPL){
 										WebElement buttonMapping = driver.findElement(By.xpath(xpathMappingBPPLUser));
 										if(buttonMapping.isDisplayed()){
-											check = true;
 											buttonMapping.click();
 											WebElement popup = driver.findElement(By.id("popupContact"));
 											if(popup.isDisplayed()){
 												bodyText +="Go to usermapping page click to button edit mapping PL user : PASSED <br>";
+												checkExistMappingButtonPL = true;
 											}else{
-												bodyText +="Go to usermapping page click to button edit mapping PL user : Fail(popup not display)<br>";
+												bodyText +="Go to usermapping page click to button  mapping PL user : Fail(popup not display)<br>";
 											}
 
 										}
 									}
-									if(!check){
-										bodyText +="Go to usermapping page can not find button usermapping or edit mapping in row : " + j +" of column PL user <br>";
-									}
+									
 									
 								} catch (Exception e) {
 									e.printStackTrace();
