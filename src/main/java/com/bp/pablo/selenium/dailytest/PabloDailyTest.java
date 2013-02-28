@@ -343,6 +343,7 @@ public class PabloDailyTest {
 												checkExistEditButtonBP = true;
 											}else{
 												bodyText +="Go to usermapping page click to button edit usermapping BPUSER : Fail(popup not display) <br>";
+												checkExistEditButtonBP = true;
 											}
 										}
 									}
@@ -350,7 +351,6 @@ public class PabloDailyTest {
 									if(!checkExistMappingButtonBP){
 										WebElement buttonMapping = driver.findElement(By.xpath(xpathMappingBPUser));
 										if(buttonMapping.isDisplayed()){
-											
 											buttonMapping.click();
 											WebElement popup = driver.findElement(By.id("popupContact"));
 											if(popup.isDisplayed()){
@@ -358,6 +358,7 @@ public class PabloDailyTest {
 												checkExistMappingButtonBP = true;
 											}else{
 												bodyText +="Go to usermapping page click to button  mapping BPUSER : Fail(popup not display)<br>";
+												checkExistMappingButtonBP = true;
 											}
 
 										}
@@ -384,6 +385,7 @@ public class PabloDailyTest {
 											checkExistEditButtonAVIARY = true;
 										}else{
 											bodyText +="Go to usermapping page click to button edit usermapping Aviary : Fail(popup not display) <br>";
+											checkExistEditButtonAVIARY = true;
 										}
 									}	
 								}
@@ -398,6 +400,7 @@ public class PabloDailyTest {
 												checkExistMappingButtonAVIARY = true;
 											}else{
 												bodyText +="Go to usermapping page click to button  mapping Aviary : Fail(popup not display)<br>";
+												checkExistMappingButtonAVIARY = true;
 											}
 
 										}
@@ -405,7 +408,6 @@ public class PabloDailyTest {
 								
 									
 								} catch (Exception e) {
-									e.printStackTrace();
 									continue;
 								}
 							}
@@ -428,6 +430,7 @@ public class PabloDailyTest {
 												checkExistEditButtonPL = true;
 											}else{
 												bodyText +="Go to usermapping page click to button usermapping PL user : Fail(popup not display) <br>";
+												checkExistEditButtonPL = true;
 											}
 										}
 									}
@@ -442,6 +445,7 @@ public class PabloDailyTest {
 												checkExistMappingButtonPL = true;
 											}else{
 												bodyText +="Go to usermapping page click to button  mapping PL user : Fail(popup not display)<br>";
+												checkExistMappingButtonPL = true;
 											}
 
 										}
